@@ -11,7 +11,7 @@ import MenuButton from '../components/MenuButton';
 export default class HomeScreen extends React.Component {
 
   static navigationOptions = {
-    headerTitle: "Wordpress App",
+    headerTitle: "Posts",
     headerLeft: ({scene})=>{
       var {navigation} = scene.descriptor;
       return (<MenuButton  onPress={()=>navigation.toggleDrawer()} />)},
@@ -22,7 +22,7 @@ render(){ return (
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}>
-        <Text>This is my own Home!</Text>
+        <Text>Posts!</Text>
       </ScrollView>
     </View>
   )
