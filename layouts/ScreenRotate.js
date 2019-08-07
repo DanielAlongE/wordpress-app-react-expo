@@ -20,7 +20,11 @@ export default class ScreenRotate extends React.Component {
     }
 
     componentDidMount() {
-        ScreenOrientation.allow(ScreenOrientation.OrientationLock.ALL);    
+        //ScreenOrientation.allow(ScreenOrientation.OrientationLock.ALL);   
+        //OrientationLock.ALL
+        (async function changeScreenOrientation() {
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.ALL);
+          })();
     }
 
     render(){

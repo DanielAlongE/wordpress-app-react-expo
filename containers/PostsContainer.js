@@ -6,19 +6,18 @@ import { connect } from 'react-redux';
 import {getApi, cancelToken} from '../redux/api/action';
 
 
-const CategoriesContainer = (Comp, rest={}) => class extends Component {
+const PostsContainer = (Comp, rest={}) => class extends Component {
 
-
+  apiId = !!rest.id ? rest.id : 'posts';
   offset=0;
-  per_page=50;
-  categories=0;
+  per_page=10;
+  //categories=0;
   //author=0;
   search='';
-  orderby='count';
+  orderby='date';
   order='desc';
   status='publish';
-  hide_empty=true
-
+  //hide_empty=true
 
   constructor(props){
 
@@ -29,18 +28,19 @@ const CategoriesContainer = (Comp, rest={}) => class extends Component {
     }
    
     //desc, asc |author, date, id, include, modified, parent, relevance, slug, title
-   //this.fetchMore = this.fetchMore.bind(this);
+   this.fetchMore = this.fetchMore.bind(this);
 
 
   }
 
 
   fetchMore(){
-      let {per_page, orderby, order, hide_empty} = this;
+      let {per_page, orderby, order, apiId} = this;
       let {getApi, url} = this.props;
+      var  offset = this.props.api && this.props.api[apiId] && this.props.api[apiId].offset ? this.props.api[apiId].offset : 0;
     //console.log('static', this);
-      getApi(`${url}/wp-json/wp/v2/categories`,{per_page, orderby, order, hide_empty},'categories')
-        .then(res=>console.log('done fetching'));
+      getApi(`${url}/wp-json/wp/v2/posts`,{per_page, orderby, offset, order, _embed:''}, apiId)
+        .then(res=>console.log(apiId, 'done fetching >', offset));
   }
 
 
@@ -59,26 +59,26 @@ componentWillUnmount() {
 componentDidMount() {
   this._isMounted = true;
 
-  const {categories} = this.props
+  const posts = this.props.api && this.props.api[this.apiId];
 
-  if(categories){}else{this.fetchMore()}
+  if(posts){}else{this.fetchMore()}
 
 }
 
 
         render() {
 
-        //console.log(this.props.url);
+        const {fetchMore} = this;
 
         const {navigation} = this.props;
         
-        var categories = this.props.categories ? this.props.categories.data : [];
+       
 
-        
+        const args = {fetchMore};
 
-        const args = {categories};
+        args.posts = this.props.api[this.apiId] ? this.props.api[this.apiId] : {};
 
-        if(navigation){
+         if(navigation){
           args.navigation = navigation;
         }
 
@@ -93,13 +93,13 @@ componentDidMount() {
 const mapStateToProps = state => (
   {
       url: state.globalState.url,
-      categories:state.api.categories, 
-      api: state.api
+      api:state.api, 
+
 
 });
 
 
 export default compose(
     connect(mapStateToProps, {getApi, cancelToken}),
-    CategoriesContainer
+    PostsContainer
   );

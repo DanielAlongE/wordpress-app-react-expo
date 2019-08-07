@@ -1,7 +1,9 @@
 import {SET_GLOBAL_STATE, CLEAR_GLOBAL_STATE} from './action';
 
 const initialState = {
-  url:'https://www.premiumtimesng.com'
+  //url:'https://www.premiumtimesng.com'
+  //url:'https://www.thecable.ng'
+  url: 'https://www.punchng.com'
 };
 
 const reducer = (state = initialState, action) => {

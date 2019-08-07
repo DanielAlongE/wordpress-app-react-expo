@@ -7,8 +7,10 @@ import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './navigation/AppNavigator';
 import Provider from './redux/Provider';
+import { Provider as PaperProvider } from 'react-native-paper';
+import NavigationService from './navigation/NavigationService';
+import theme from './customTheme';
 
-import CategoriesComp from './components/CategoriesComp';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -24,11 +26,14 @@ export default function App(props) {
   } else {
     return (
       <Provider>
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <CategoriesComp />
-          <AppNavigator />
-        </View>
+        <PaperProvider theme={theme}>
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+              <AppNavigator ref={navigatorRef => {
+              NavigationService.setTopLevelNavigator(navigatorRef);
+            }} />
+          </View>          
+        </PaperProvider>
       </Provider>
     );
   }

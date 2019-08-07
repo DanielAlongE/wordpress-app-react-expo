@@ -22,11 +22,12 @@ backdrop - color for backdrops of various components such as modals.
 
 const theme = {
   ...DefaultTheme,
-  roundness: 2,
+  roundness: 10,
   colors: {
     ...DefaultTheme.colors,
     primary: Colors.lightBlue900, //'#3498db',
-    accent: Colors.lightBlue500//'#f1c40f',
+    accent: Colors.lightBlue500, //'#f1c40f',
+    background: Colors.lightBlue50
   },
   dark:false
 };

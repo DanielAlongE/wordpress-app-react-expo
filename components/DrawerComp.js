@@ -1,21 +1,20 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 //import { DrawerItems, SafeAreaView } from 'react-navigation';
 import { Drawer, List, Button  } from 'react-native-paper';
-import CategoriesContainer from '../containers/CategoriesContainer';
+import NavigationService from '../navigation/NavigationService.js';
 import LoadingComp from './LoadingComp';
 import theme from '../customTheme';
 
 
-const DrawerComp = ({categories=[], navigation, ...rest}) => {
+const DrawerComp = ({categories, ...rest}) => {
 
-    const {navigate} = navigation;
+    const {navigate} = NavigationService;
 
-    console.log({categories});
-    //<List.Item key={`list-${i}`} title={n.name} />
-    //active={active === 'first'}
+    const data = categories && categories.data ? categories.data : [];
 
-var menu = categories.map((n,i) => {
+var menu = data.map((n,i) => {
 
     const {name, slug} = n;
     
@@ -32,10 +31,12 @@ return (
 <View>
     <View style={{height:100, backgroundColor:theme.colors.accent}}></View>    
     <ScrollView>
-        {categories.length===0 ? <LoadingComp /> : menu}
+        {data.length===0 ? <LoadingComp /> : menu}
     </ScrollView>    
 </View>
 
 )};
 
-export default CategoriesContainer(DrawerComp);
+const mapState = state => ({categories:state.api.categories});
+
+export default connect(mapState)(DrawerComp);

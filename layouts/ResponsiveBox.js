@@ -27,10 +27,12 @@ export default class ResBox extends React.Component {
 
         this.state = {
             style:{},
-            width:0,
-            height:0
+            width:360,
+            height:640
         }
     }
+
+    style = {};
 
     hideBox(){
         var hidden = this.props.hidden ? this.props.hidden : '';
@@ -59,15 +61,19 @@ export default class ResBox extends React.Component {
         var device = deviceIs();
 
         if(small && device === 'small'){
-            this._setState({style:{...style, ...small}});
+            //this._setState({style:{...style, ...small}});
+            this.style ={...style, ...small};
         }
         else if(medium && device === 'medium'){
-            this._setState({style:{...style, ...medium}});
+            //this._setState({style:{...style, ...medium}});
+            this.style = {...style, ...medium};
         }
         else if(large && device === 'large'){
-            this._setState({style:{...style, ...large}});
+            //this._setState({style:{...style, ...large}});
+            this.style = {...style, ...large};
         }else{
-            this._setState({style});
+            //this._setState({style});
+            this.style = {...style};
         }
         
         //console.log({device, def});
@@ -82,6 +88,8 @@ export default class ResBox extends React.Component {
 
     componentWillMount() {
         this._isMounted = false;
+
+        this.resetBox();
 
         Dimensions.addEventListener('change', ()=>this.resetBox());
         
@@ -100,9 +108,19 @@ export default class ResBox extends React.Component {
 
     render(){
 
-        var {style, width, height} = this.state;
+        //const Comp = this.props.comp ? this.props.comp : View;
+
+        const {children, style:s, small, medium, large, as:Comp=View, ...args} = this.props;
+
+        var { //style, 
+            width, height} = this.state;
+
+        var style = {...this.style};
 
         //var {maxWidth, maxHeight} = this.props;
+
+        //console.log('before', style)
+    
         
         if(style.pWidth){
             style.width = width * (style.pWidth/100);
@@ -115,19 +133,39 @@ export default class ResBox extends React.Component {
         }
 
         if(style.pMargin){
-            style.margin = height * (style.pMargin/100);
+            style.margin = width * (style.pMargin/100);
             delete style.pMargin;
         }
 
+        if(style.pMarginRight){
+            style.marginRight = width * (style.pMarginRight/100);
+            delete style.pMarginRight;
+        }
+
+        if(style.pMarginLeft){
+            style.marginLeft = width * (style.pMarginLeft/100);
+            delete style.pMarginLeft;
+        }
+
         if(style.pPadding){
-            style.padding = height * (style.pPadding/100);
+            style.padding = width * (style.pPadding/100);
             delete style.pPadding;
         }
 
-        return this.hideBox() ? (<View></View>) :(
-        <View style={style}>
-            {this.props.children}
-        </View>)
+    
+        if(this.hideBox()){
+            return <View></View>
+        }else if(children){
+            return  (
+                <Comp {...args} style={style} >
+                    {children}
+                </Comp>)
+        }else{
+            //console.log('args', args)       
+            return <Comp {...args} style={style} />
+        }
+
+
     }
     
 

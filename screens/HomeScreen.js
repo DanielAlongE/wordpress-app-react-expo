@@ -7,6 +7,10 @@ import {
   View,
 } from 'react-native';
 import MenuButton from '../components/MenuButton';
+import PostsComp from '../components/PostsComp';
+import CategoriesComp from '../components/CategoriesComp';
+import theme from '../customTheme';
+import ScreenRotate from '../layouts/ScreenRotate';
 
 export default class HomeScreen extends React.Component {
 
@@ -17,22 +21,27 @@ export default class HomeScreen extends React.Component {
       return (<MenuButton  onPress={()=>navigation.toggleDrawer()} />)},
   };
 
-render(){ return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-        <Text>This is my own Home!</Text>
-      </ScrollView>
-    </View>
-  )
-}
+
+  render(){ 
+
+    //console.log('HomeScreen', this.props)
+    
+    return (
+      <View style={styles.container}>
+        <ScrollView style={styles.container}>
+          <CategoriesComp />
+          <PostsComp />
+        </ScrollView>
+        <ScreenRotate />
+      </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor:theme.colors.background
   },
 
 });
