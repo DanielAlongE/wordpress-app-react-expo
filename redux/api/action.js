@@ -152,7 +152,7 @@ export const editApi = (id, json) =>  dispatch => dispatch(fetchApiEdit(id, json
 export const deleteApi = (id, json) => dispatch => dispatch(fetchApiDelete(id, json));
 
 
-export const getApi = (url='', obj={}, id="getApi", cancel) => {
+export const getApi = (url='', obj={}, id=null, cancel) => {
 
   //let headers = !!obj.headers ? obj.headers : {};
   let data = !!obj.data ? obj.data : obj;
@@ -161,7 +161,7 @@ export const getApi = (url='', obj={}, id="getApi", cancel) => {
 
   return dispatch => {
   
-    dispatch(fetchApiRequest(id));
+    id===null || dispatch(fetchApiRequest(id));
 
     //check for cancelToken
     let args = cancel ? {cancelToken: cancel.token} : {};
@@ -170,13 +170,14 @@ export const getApi = (url='', obj={}, id="getApi", cancel) => {
       args.headers = obj.headers;
     }
 
+    console.log(`${url}?${params}`)
       return axios.get(`${url}?${params}`, args)
       .then(res=>{
 
-        dispatch(fetchApiSuccess(id,res.data));
+        id===null || dispatch(fetchApiSuccess(id,res.data));
         return res;
       }).catch(error => {
-        dispatch(fetchApiFailure(id, error.message));
+        id===null || dispatch(fetchApiFailure(id, error.message));
         return error;
       });
       

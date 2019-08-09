@@ -35,11 +35,18 @@ const PostsContainer = (Comp, rest={}) => class extends Component {
 
 
   fetchMore(){
+      const {categories} = this.props;
       let {per_page, orderby, order, apiId} = this;
       let {getApi, url} = this.props;
       var  offset = this.props.api && this.props.api[apiId] && this.props.api[apiId].offset ? this.props.api[apiId].offset : 0;
-    //console.log('static', this);
-      getApi(`${url}/wp-json/wp/v2/posts`,{per_page, orderby, offset, order, _embed:''}, apiId)
+
+      var args = {per_page, orderby, offset, order, _embed:''};
+
+      if(categories){
+        args.categories = categories;
+      }
+
+      getApi(`${url}/wp-json/wp/v2/posts`,{...args}, apiId)
         .then(res=>console.log(apiId, 'done fetching >', offset));
   }
 
@@ -59,24 +66,47 @@ componentWillUnmount() {
 componentDidMount() {
   this._isMounted = true;
 
-  const posts = this.props.api && this.props.api[this.apiId];
+  const {categories} = this.props;
+  const posts = this.props.api && this.props.api[this.apiId] ;
 
-  if(posts){}else{this.fetchMore()}
+
+
+  if(categories){
+      if(posts){
+        var check = posts.data.filter(post=>{ return post.categories.indexOf(categories) > -1;  });
+
+        if(check.length>0){
+          console.log('post cat has content', categories);
+        }else{
+          this.fetchMore();
+        }
+
+      }else{
+        this.fetchMore();
+      }
+  }
+  else if(posts){}else{this.fetchMore()}
 
 }
 
 
         render() {
 
-        const {fetchMore} = this;
+        const {fetchMore, apiId} = this;
 
-        const {navigation} = this.props;
-        
-       
+        const {navigation, categories} = this.props;
+
+        const posts = this.props.api && this.props.api[apiId];
 
         const args = {fetchMore};
 
-        args.posts = this.props.api[this.apiId] ? this.props.api[this.apiId] : {};
+        if(posts){
+          args.posts = posts;
+        }
+
+        if(categories){
+          args.categories = categories;
+        }
 
          if(navigation){
           args.navigation = navigation;

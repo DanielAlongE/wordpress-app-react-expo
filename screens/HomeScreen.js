@@ -1,5 +1,6 @@
 //import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   ScrollView,
   StyleSheet,
@@ -7,30 +8,42 @@ import {
   View,
 } from 'react-native';
 import MenuButton from '../components/MenuButton';
+import HomeComp from '../components/HomeComp';
 import PostsComp from '../components/PostsComp';
-import CategoriesComp from '../components/CategoriesComp';
 import theme from '../customTheme';
 import ScreenRotate from '../layouts/ScreenRotate';
 
-export default class HomeScreen extends React.Component {
+const mapState = state => ({gState:state.globalState});
 
-  static navigationOptions = {
-    headerTitle: "Wordpress App",
+class HomeScreen extends React.Component {
+
+  static navigationOptions = ({ navigation }) => {
+    
+    return ({
+    headerTitle: navigation.getParam('title', 'Wordpress App'),
     headerLeft: ({scene})=>{
       var {navigation} = scene.descriptor;
       return (<MenuButton  onPress={()=>navigation.toggleDrawer()} />)},
-  };
+  });
+}
 
+  componentDidMount() {
+ 
+    //navigation.navigate('Home', {title:'I hope we are right'});
+    //console.log({gState});
+  }
 
   render(){ 
 
-    //console.log('HomeScreen', this.props)
+    const {navigation} = this.props;
+
+    
     
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container}>
-          <CategoriesComp />
           <PostsComp />
+          <HomeComp navigation={navigation} />
         </ScrollView>
         <ScreenRotate />
       </View>
@@ -45,3 +58,5 @@ const styles = StyleSheet.create({
   },
 
 });
+
+export default HomeScreen;

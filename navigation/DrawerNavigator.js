@@ -16,7 +16,7 @@ const drawerViewConfig = {
       labelStyle: {}
     },
     drawerWidth : 300,
-    drawerType: 'slide',// 'front' | 'back' | 'slide';
+    drawerType: 'front',// 'front' | 'back' | 'slide';
     drawerLockMode: "locked-closed", //'unlocked' | 'locked-closed' | 'locked-open';
     edgeWidth: 1,
     drawerPosition: 'left'

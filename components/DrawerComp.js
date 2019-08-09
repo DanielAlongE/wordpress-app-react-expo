@@ -3,25 +3,32 @@ import { connect } from 'react-redux';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 //import { DrawerItems, SafeAreaView } from 'react-navigation';
 import { Drawer, List, Button  } from 'react-native-paper';
-import NavigationService from '../navigation/NavigationService.js';
+//import NavigationService from '../navigation/NavigationService.js';
 import LoadingComp from './LoadingComp';
 import theme from '../customTheme';
 
 
-const DrawerComp = ({categories, ...rest}) => {
+const DrawerComp = ({categories, navigation, ...rest}) => {
 
-    const {navigate} = NavigationService;
+    const {navigate} = navigation;
 
     const data = categories && categories.data ? categories.data : [];
 
-var menu = data.map((n,i) => {
+    let root = data.filter((cat)=>cat.parent === 0);
 
-    const {name, slug} = n;
+    //console.log('navigation', rest.navigation.push);
+
+var menu = root.map((n,i) => {
+
+    const {name, id} = n;
     
     return (
           <Drawer.Item key={`list-${i}`}
           label={name}
-          onPress={() => navigate('Posts', {title:name, slug})}
+          onPress={() => {
+                navigation.closeDrawer();
+              navigate('Posts', {title:name, categories:id});
+            }}
         />)}
     );
 

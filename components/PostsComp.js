@@ -6,6 +6,7 @@ import {Button, List, Avatar, Surface, Card, Text, Title, Paragraph } from 'reac
 import Loading from './LoadingComp';
 import HTML from 'react-native-render-html';
 
+const moment = require('moment');
 
 const Wrapper = ({children, ...rest}) => <Box style={{pWidth:100, pMarginLeft:5, pMarginRight:5}}>
 {children}
@@ -14,9 +15,17 @@ const Wrapper = ({children, ...rest}) => <Box style={{pWidth:100, pMarginLeft:5,
 const Img = (args) => <Box as={Image}
 small={{ pWidth: 100, pHeight: 50, tintColor:'red'}} {...args} />
 
-const Posts = ({posts, fetchMore, Navigation, theme, ...rest}) => {
-    const {data=[], isFetching=true} = posts;
-    const moment = require('moment');
+const Posts = ({posts={}, fetchMore, Navigation, theme, categories, ...rest}) => {
+    var {data=[], isFetching=true} = posts;
+
+    if(categories){
+        data = data.filter(post=>{ 
+            console.log(post.categories, post.categories.indexOf(categories))
+            return post.categories.indexOf(categories) > -1; });
+        console.log('categories', categories);
+    }
+
+
 
     const show = data.map((n,i)=>{
 
