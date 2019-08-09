@@ -10,7 +10,7 @@ const HomeComp = ({some}) => {
 
     return (
         <View>
-            <Text>we are home</Text>
+            <Text></Text>
         </View>
     );
 }

@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 //import PropTypes from 'prop-types';
-import {compose} from 'redux';
+//import {compose} from 'redux';
 import { connect } from 'react-redux';
 
 import {getApi, cancelToken} from '../redux/api/action';
 import set from '../redux/global-state';
 
 
-const HomeContainer = (Comp, rest={}) => class extends Component {
+class WordpressApi extends Component {
 
   apiId = 'home';
   offset=0;
-  per_page=10;
+  per_page=1;
   //categories=0;
   //author=0;
   search='';
@@ -22,17 +22,7 @@ const HomeContainer = (Comp, rest={}) => class extends Component {
 
 
   constructor(props){
-
-    super(props);
-
-    this.state = {
-        
-    }
-   
-    //desc, asc |author, date, id, include, modified, parent, relevance, slug, title
-   this.fetchMore = this.fetchMore.bind(this);
-
-
+    this.props;
   }
 
   //here we will get id of all the posts that have been previously fetched in order to exclude the from future fetches
@@ -208,78 +198,21 @@ const HomeContainer = (Comp, rest={}) => class extends Component {
   }
 
 
-componentWillMount(){
-  this._isMounted = false;
-  //set cancelToken
-  //this.cancelToken = this.props.cancelToken();
-
-  //this.props.set({url:'https://www.thecable.ng',title:'TheCable'})
-
-
-}
-
-
-
-componentDidMount() {
-  this._isMounted = true;
-
-      const {gState, posts} = this.props;
-
-      
-  //get app config
-  this.props.navigation.setParams({ title: gState.title || 'Kilode?' });
-
-
-  //console.log(this.props)
-  if(posts){}else{}
-    this.generateHome();
-  
-
-
-
-}
-
-componentWillUnmount() {
-  this._isMounted = false;
-
-  //if(this.cancelToken){ this.cancelToken.cancel('ComponenetWillUnmount');}
-}
-        render() {
-
-        const {fetchMore} = this;
-
-        const {navigation} = this.props;
-        
-        //console.log('Home-config',gState);
-
-        const args = {fetchMore};
-
-        args.posts = this.props.posts ? this.props.posts : {};
-
-         if(navigation){
-          args.navigation = navigation;
-        }
-
-        return (
-            <Comp {...args} />
-        )
-        }
 
     }
 
 
-const mapStateToProps = state => (
-  {
-      url: state.globalState.url,
-      posts:state.api.posts,
-      categories:state.api.categories, 
-      gState:state.globalState 
+    const mapStateToProps = state => (
+      {
+          url: state.globalState.url,
+          posts:state.api.posts,
+          categories:state.api.categories, 
+          gState:state.globalState 
+    
+    
+    });
+    
 
 
-});
-
-
-export default compose(
-    connect(mapStateToProps, {set, getApi, cancelToken}),
-    HomeContainer
-  );
+export default (WordpressApi);
+//connect(mapStateToProps, {set, getApi, cancelToken})

@@ -42,7 +42,7 @@ class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container}>
-          <PostsComp />
+          <PostsComp navigation={navigation} />
           <HomeComp navigation={navigation} />
         </ScrollView>
         <ScreenRotate />

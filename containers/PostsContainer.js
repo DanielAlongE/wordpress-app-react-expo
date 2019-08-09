@@ -10,7 +10,7 @@ const PostsContainer = (Comp, rest={}) => class extends Component {
 
   apiId = !!rest.id ? rest.id : 'posts';
   offset=0;
-  per_page=10;
+  per_page=1;
   //categories=0;
   //author=0;
   search='';
@@ -110,6 +110,7 @@ componentDidMount() {
 
          if(navigation){
           args.navigation = navigation;
+
         }
 
         return (

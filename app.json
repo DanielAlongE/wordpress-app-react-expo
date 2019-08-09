@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Wordpress App",
+    "name": "Wordpress Blog App",
     "slug": "WordpressApp",
     "privacy": "public",
     "sdkVersion": "34.0.0",
@@ -25,6 +25,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "This App seeks to explore the posibility of creating a mobile app version of an existing Wordpress Blog. This is made easy because of the wordpress rest api. Here we are using React Native via Expo for ease!",
+    "githubUrl": "https://github.com/BrownMarble/wordpress-app-react-expo"
   }
 }

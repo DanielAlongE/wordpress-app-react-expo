@@ -1,9 +1,12 @@
-import {DrawerItems, createDrawerNavigator, createStackNavigator} from 'react-navigation';
+import {DrawerItems, createDrawerNavigator, createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 import DrawerComp from '../components/DrawerComp';
 import theme from '../customTheme';
+import React from 'react';
+import {View} from 'react-native';
 
 import HomeScreen from '../screens/HomeScreen';
 import PostsScreen from '../screens/PostsScreen';
+import PostScreen from '../screens/PostScreen';
 
 const drawerViewConfig = {
     contentComponent: DrawerComp,
@@ -25,7 +28,7 @@ const drawerViewConfig = {
   };
   
 
-const stackConfig = {mode: 'modal', //| 'card'
+const stackConfig = {mode: 'card', //modal| 'card'
       headerBackTitleVisible:false,
       headerLayoutPreset: 'center',
       cardOverlayEnabled: false,
@@ -41,14 +44,23 @@ const stackConfig = {mode: 'modal', //| 'card'
       },
     };
 
+const SettingsNavigator = createBottomTabNavigator({
+  Settings: {screen: ()=><View style={{flex:1, backgroundColor:'yellow'}}></View>},
+  Settings1: {screen: ()=><View style={{flex:1, backgroundColor:'pink'}}></View>},
+  Settings2: {screen: ()=><View style={{flex:1, backgroundColor:'violet'}}></View>}
+
+});
+
 
 const HomeNavigator = createStackNavigator({
   Home: {screen: HomeScreen},
-  Posts: {screen: PostsScreen}
+  Posts: {screen: PostsScreen},
+  Post: {screen: PostScreen}
 },
 {...stackConfig});
 
 export default createDrawerNavigator({
+  Settings: SettingsNavigator,
   Home: HomeNavigator,
 },
   {
