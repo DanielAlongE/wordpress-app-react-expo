@@ -8,10 +8,12 @@ import {
   View,
 } from 'react-native';
 import MenuButton from '../components/MenuButton';
-import HomeComp from '../components/HomeComp';
-import PostsComp from '../components/PostsComp';
+//import HomeComp from '../components/HomeComp';
+//import PostsComp from '../components/PostsComp';
 import theme from '../customTheme';
 import ScreenRotate from '../layouts/ScreenRotate';
+
+import WordPress from '../builder/components/WordPressPostsComp';
 
 const mapState = state => ({gState:state.globalState});
 
@@ -42,8 +44,8 @@ class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container}>
-          <PostsComp navigation={navigation} />
-          <HomeComp navigation={navigation} />
+          <WordPress navigation={navigation} />
+          
         </ScrollView>
         <ScreenRotate />
       </View>

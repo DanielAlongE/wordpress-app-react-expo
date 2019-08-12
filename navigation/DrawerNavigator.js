@@ -7,6 +7,12 @@ import {View} from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import PostsScreen from '../screens/PostsScreen';
 import PostScreen from '../screens/PostScreen';
+import StartScreen from '../screens/StartScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import MenusScreen from '../screens/MenusScreen';
+import PagesScreen from '../screens/PagesScreen';
+import ThemeScreen from '../screens/ThemeScreen';
+
 
 const drawerViewConfig = {
     contentComponent: DrawerComp,
@@ -45,10 +51,16 @@ const stackConfig = {mode: 'card', //modal| 'card'
     };
 
 const SettingsNavigator = createBottomTabNavigator({
-  Settings: {screen: ()=><View style={{flex:1, backgroundColor:'yellow'}}></View>},
-  Settings1: {screen: ()=><View style={{flex:1, backgroundColor:'pink'}}></View>},
-  Settings2: {screen: ()=><View style={{flex:1, backgroundColor:'violet'}}></View>}
+  Settings: {screen: SettingsScreen},
+  Menus: {screen: MenusScreen},
+  Pages: {screen: PagesScreen},
+  Theme: {screen: ThemeScreen}
 
+},{
+  tabBarOptions: {
+    activeTintColor: 'tomato',
+    inactiveTintColor: 'gray',
+  }
 });
 
 
@@ -60,11 +72,12 @@ const HomeNavigator = createStackNavigator({
 {...stackConfig});
 
 export default createDrawerNavigator({
+  Splash: {screen: StartScreen},
   Settings: SettingsNavigator,
   Home: HomeNavigator,
 },
   {
-    initialRouteName: "Home",
+    initialRouteName: "Splash",
     
     ...drawerViewConfig,
 

@@ -42,7 +42,7 @@ const Posts = ({posts={}, fetchMore, navigation, theme, categories, ...rest}) =>
 
         if(i===0){
             return(
-                <Card key={`post-${i}`} theme={{roundness:0}}>
+                <Card onPress={()=>navigate('Post',{title:t, id})} key={`post-${i}`} theme={{roundness:0}}>
                     <Card.Cover source={{ uri: medium.source_url }} />
                 <Card.Content>
                   <Title>{t}</Title>
@@ -54,7 +54,7 @@ const Posts = ({posts={}, fetchMore, navigation, theme, categories, ...rest}) =>
 
         return (
         <Box key={`post-${i}`} style={{marginBottom:10, marginTop:10}}>
-            <Surface elevation={5}>
+            <Surface elevation={1}>
                 <List.Accordion title={t} description={dateFromNow} 
                 left={props=>(<Avatar.Image size={30} source={{uri:thumbnail.source_url}} />)} >
                     <View style={{paddingRight:10}}>

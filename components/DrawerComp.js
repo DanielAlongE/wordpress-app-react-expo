@@ -23,7 +23,7 @@ var menu = root.map((n,i) => {
     const {name, id} = n;
     
     return (
-          <Drawer.Item key={`list-${i}`}
+        <Drawer.Item key={`list-${i}`}
           label={name}
           onPress={() => {
                 navigation.closeDrawer();
