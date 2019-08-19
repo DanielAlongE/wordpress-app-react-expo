@@ -2,8 +2,9 @@ import React from 'react';
 import {  ScrollView, View } from 'react-native';
 import {  Text, Button, Card, Title, Paragraph, Avatar, TextInput, Divider, Switch, RadioButton, Checkbox, List, IconButton } from 'react-native-paper';
 //import NavigationService from '../../navigation/NavigationService.js';
-import WordPressPostsContainer from '../containers/WordPressPostsContainer';
-
+//import WordPressPostsContainer from '../containers/WordPressPostsContainer';
+import HomeContainer from '../../containers/HomeContainer';
+import LoadingComp from '../../components/LoadingComp'
 
 export const PostsRegister = [
     {name:'List', comp:WordPressList},
@@ -22,6 +23,10 @@ export const WordPressList = ({posts, navigation}) =>{
     const {navigate} = navigation;
 
     const showPosts = posts.map(post => <List.Item key={post.key} title={post.title} onPress={()=>navigate('Post',{title:post.title, id:post.id})} />);
+
+    if(posts.length === 0){
+        return <LoadingComp />
+    }
 
     return (<Wrapper>{showPosts}</Wrapper>);
 }
@@ -44,6 +49,10 @@ export const WordPressThumbnailList = ({posts, navigation}) =>{
                 </Card>
                 );
 
+    if(posts.length === 0){
+        return <LoadingComp />
+    }
+
     return (<Wrapper>{showPosts}</Wrapper>);
 }
 
@@ -56,6 +65,10 @@ export const WordPressThumbnailSlide = ({posts, navigation}) =>{
                         <Card.Cover source={{ uri: post.media.medium.source_url }} />
                     </Card>
                     )
+
+    if(posts.length === 0){
+        return <LoadingComp />
+    }
 
     return (<ScrollView horizontal={true}>{showPosts}</ScrollView>);
 }
@@ -71,7 +84,11 @@ export const WordPressCardSlide = ({posts, navigation}) =>{
                                 <Paragraph>{post.title}</Paragraph>
                             </Card.Content>
                         </Card>
-                    )
+                    );
+
+    if(posts.length === 0){
+        return <LoadingComp />
+    }
 
     return (<ScrollView horizontal={true}>{showPosts}</ScrollView>);
 }
@@ -88,8 +105,28 @@ export const WordPressCard = ({posts, navigation}) =>{
                             </Card.Content>
                         </Card>
                     )
-
+    if(posts.length === 0){
+        return <LoadingComp />
+    }
+    
     return (<View>{showPosts}</View>);
 }
 
-export default WordPressPostsContainer(WordPressThumbnailList);
+const TestingAllComp = ({posts, navigation}) => {
+    const args = {posts, navigation};
+    return (<View>
+        <WordPressCardSlide {...args} />
+        <WordPressThumbnailList {...args} />
+        <WordPressThumbnailSlide {...args} />
+        <WordPressCardSlide {...args} />
+        <WordPressCard {...args} />
+        <WordPressList {...args} />
+
+    </View>);
+    }
+
+export default HomeContainer(TestingAllComp);
+
+//export default WordPressPostsContainer(WordPressThumbnailList);
+
+//export default (props)=><WordPressPostsContainer {...props} ><WordPressThumbnailList /></WordPressPostsContainer>

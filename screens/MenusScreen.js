@@ -1,12 +1,11 @@
 import React from 'react';
 //import {TestForm} from '../builder/TestForm';
-import AppBuilder from '../builder/containers/AppSettingsContainer';
+import AppMenus from '../builder/containers/AppMenusContainer';
 import { IconButton } from 'react-native-paper';
-
 
 export default function SettingsScreen({navigation} ) {
 
-  return <AppBuilder navigation={navigation} />;
+  return <AppMenus navigation={navigation} />;
 }
 
 SettingsScreen.navigationOptions = {

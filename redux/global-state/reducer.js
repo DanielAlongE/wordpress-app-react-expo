@@ -9,7 +9,15 @@ const initialState = {
       url:'https://www.premiumtimesng.com', title:'PremiumTimes', name:'PremiumTimes'
     },
     {
-      url:'https://www.thecable.ng', title:'TheCable', name:'TheCable'
+      url:'https://www.thecable.ng', title:'TheCable', name:'TheCable',
+      menus:{
+        main_menu:[
+          {name:"Home", type:'page', id:1, title:'This is the home page', icon:'home'},
+          {name:'About Us', type:'wp_page', id:2}
+        ],
+        sub_menu:[],
+        custom_menu:[]
+      }
     }
   ]
 };

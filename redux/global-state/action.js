@@ -14,7 +14,13 @@ type: CLEAR_GLOBAL_STATE
 
 export const clear = () => dispatch => dispatch(clearState());
 
-const set = (obj) => dispatch => dispatch(setState(obj));
+const set = (obj) => dispatch => {
+  dispatch(setState(obj));
+  
+  return Promise.resolve()
+
+
+}
 
 export default set;
 

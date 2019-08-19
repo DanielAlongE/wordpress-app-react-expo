@@ -50,17 +50,23 @@ export default class FormBuilderContainer extends Component {
     defaultFormAction(obj){
         console.log("you didn't supply an anction", obj)
     }
-    
-    componentDidMount() {
-        this._isMounted = true; 
 
+    init(){
         //set form submit action
         this.action = this.props.action || this.defaultFormAction;
 
         //get default values if available
         const inputs = this.props.defaultValues || {};
         this.setState({inputs});
+
+        console.log("FormBuilder - Init", this.props.isFocused)
+    }
+
     
+    componentDidMount() {
+        this._isMounted = true; 
+        
+        this.init();
     }
 
     
@@ -207,6 +213,7 @@ export default class FormBuilderContainer extends Component {
 
         const handleChange = this.props.handleChange || this.handleChange;
 
+        //console.log('Form builder', formData, state)
 
         const form = this.buildForm(formData, state, handleChange);
 

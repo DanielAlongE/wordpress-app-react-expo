@@ -1,12 +1,13 @@
 import React from 'react';
 //import {TestForm} from '../builder/TestForm';
+import { withNavigationFocus } from "react-navigation";
 import AppSettings from '../builder/containers/AppSettingsContainer';
 import { IconButton } from 'react-native-paper';
 
 
-export default function SettingsScreen({navigation} ) {
+function SettingsScreen({navigation, isFocused}) {
 
-  return <AppSettings navigation={navigation} />;
+  return <AppSettings navigation={navigation} isFocused={isFocused} />;
 }
 
 SettingsScreen.navigationOptions = {
@@ -15,3 +16,5 @@ SettingsScreen.navigationOptions = {
     return (<IconButton color={tintColor} icon="settings" />);
   }
 };
+
+export default withNavigationFocus(SettingsScreen);

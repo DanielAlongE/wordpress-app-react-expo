@@ -12,7 +12,7 @@ import MenuButton from '../components/MenuButton';
 //import PostsComp from '../components/PostsComp';
 import theme from '../customTheme';
 import ScreenRotate from '../layouts/ScreenRotate';
-
+import { withNavigationFocus } from "react-navigation";
 import WordPress from '../builder/components/WordPressPostsComp';
 
 const mapState = state => ({gState:state.globalState});
@@ -29,22 +29,37 @@ class HomeScreen extends React.Component {
   });
 }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.isFocused !== this.props.isFocused) {
+      // Use the `this.props.isFocused` boolean
+      // Call any action
+
+    }
+    console.log("HomeScreen is Focused", prevProps.isFocused , this.props.isFocused)
+    
+    let state = this.props.navigation.state.params;
+
+    console.log('HomeScreen',{state});
+  }
+
   componentDidMount() {
  
-    //navigation.navigate('Home', {title:'I hope we are right'});
-    //console.log({gState});
+    //this.props.navigation.navigate('Home', {title:'I hope we are right'});
+
   }
 
   render(){ 
 
-    const {navigation} = this.props;
+    const {navigation, isFocused} = this.props;
+
+    const app = navigation.state.params || {};
 
     
     
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container}>
-          <WordPress navigation={navigation} />
+          <WordPress navigation={navigation} app={app} isFocused={isFocused} />
           
         </ScrollView>
         <ScreenRotate />
@@ -61,4 +76,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default HomeScreen;
+export default withNavigationFocus(HomeScreen);

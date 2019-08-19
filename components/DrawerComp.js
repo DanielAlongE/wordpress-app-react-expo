@@ -8,6 +8,7 @@ import LoadingComp from './LoadingComp';
 import theme from '../customTheme';
 
 
+
 const DrawerComp = ({categories, navigation, ...rest}) => {
 
     const {navigate} = navigation;
@@ -44,6 +45,9 @@ return (
 
 )};
 
-const mapState = state => ({categories:state.api.categories});
+const mapState = state => ({
+    categories:state.api.categories,
+    gState: state.globalState
+});
 
 export default connect(mapState)(DrawerComp);

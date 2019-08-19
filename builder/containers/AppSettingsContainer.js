@@ -26,7 +26,7 @@ import {getApi} from '../../redux/api/action';
     }
 
     getCurrentApp(){
-        const {currentApp, apps} = this.props.gState;
+        const {currentApp=0, apps} = this.props.gState;
 
         const app = apps[currentApp] || {};
 
@@ -90,6 +90,12 @@ import {getApi} from '../../redux/api/action';
     
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.isFocused !== this.props.isFocused) {
+          console.log("AppSettings focus changed!")
+        }
+    
+      }
 
 
     render() {
@@ -98,7 +104,11 @@ import {getApi} from '../../redux/api/action';
         const state = this.getCurrentApp();
         const action = this.addWordpressFormAction;
 
-        const args = {handleChange, state, action};
+        const {isFocused} = this.props;
+
+        console.log('app', state);
+
+        const args = {handleChange, state, action, isFocused};
 
         return (
             <AppSettingsComp {...args} />

@@ -48,12 +48,12 @@ import set from '../../redux/global-state';
         var args = {currentApp:appIndex};
 
         //this will set the default app to enter
-        this.props.set({...args});
+        this.props.set({...args}).then(()=>{
+            navigation.navigate('Settings', {...args});
+        });
 
-        console.log('enterSettings ', appIndex);
-
-        navigation.navigate('Settings');
-
+        //console.log('enterSettings ', navigation);
+        //console.log('enterSettings', appIndex, args);
     }
 
     enterApp(appIndex){
@@ -81,9 +81,11 @@ import set from '../../redux/global-state';
         }
 
         //this will set the default app to enter
-        this.props.set({...args});
+        this.props.set({...args}).then(()=>{
+            navigation.push('Home', {...args});
+        });
 
-        navigation.navigate('Home', {title});
+     
 
     }
   
@@ -113,6 +115,10 @@ import set from '../../redux/global-state';
         const apps = this.getApps();
         const action = this.creactAppFormAction;
         const {enterApp, enterSettings} = this;
+
+        //const {gState} = this.props;
+
+        //console.log(gState);
 
 
         const args = {apps, action, enterApp, enterSettings};

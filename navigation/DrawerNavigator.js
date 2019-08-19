@@ -1,8 +1,10 @@
 import {DrawerItems, createDrawerNavigator, createStackNavigator, createBottomTabNavigator} from 'react-navigation';
-import DrawerComp from '../components/DrawerComp';
+//import DrawerComp from '../components/DrawerComp';
 import theme from '../customTheme';
 import React from 'react';
 import {View} from 'react-native';
+
+import DrawerComp from '../components/MainMenuComp';
 
 import HomeScreen from '../screens/HomeScreen';
 import PostsScreen from '../screens/PostsScreen';
@@ -65,6 +67,7 @@ const SettingsNavigator = createBottomTabNavigator({
 
 
 const HomeNavigator = createStackNavigator({
+  Splash: {screen: StartScreen},
   Home: {screen: HomeScreen},
   Posts: {screen: PostsScreen},
   Post: {screen: PostScreen}
@@ -72,12 +75,11 @@ const HomeNavigator = createStackNavigator({
 {...stackConfig});
 
 export default createDrawerNavigator({
-  Splash: {screen: StartScreen},
+  App: HomeNavigator,
   Settings: SettingsNavigator,
-  Home: HomeNavigator,
 },
   {
-    initialRouteName: "Splash",
+    initialRouteName: "App",
     
     ...drawerViewConfig,
 

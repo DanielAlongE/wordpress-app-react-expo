@@ -23,24 +23,24 @@ const WordpressUrlForm = (props) => {
 
     //var submit = submiting || verified ?  {} : {submit:{label:'Verify'}}
 
+    //console.log('UrlForm ', props)
 
     const helper = ({isSubmitting, success, state})=>{
 
     let url = {name:'url', placeholder:'http://www.your-wordpress-site.com'};
 
-
     if(isSubmitting){
-        url = {...url, disabled:true}
+        url = {...url, disabled:true};
     }
 
     if(success){
-        url = {...url, mode:'outlined'}
+        url = {...url, mode:'outlined', theme:{color:'green'}};
     }else{
         url.error = true;
     }
     
     //console.log(isSubmitting,success);
-    //console.log('helper',url);
+    //console.log('url Text', state);
 
     let wordpressFormData = [
         {section:{title:'WordPress Url', data:[
@@ -54,7 +54,7 @@ const WordpressUrlForm = (props) => {
     return wordpressFormData;
 
     }
-    
+
     return (<FormBuilder {...props} helper={helper} />);
 }
 
@@ -82,7 +82,7 @@ const WordpressAdvancedForm = (props) => {
 
 
 
-const AppSettingsComp = ({handleChange, state, action}) => {
+const AppSettingsComp = ({handleChange, state, action, isFocused}) => {
 
     //wordpressUrl
     const url = state.url || '';
@@ -92,7 +92,7 @@ const AppSettingsComp = ({handleChange, state, action}) => {
     return (<View>
         <EditAppForm {...args} />
 
-        <WordpressUrlForm action={action} defaultValues={{url}} />
+        {isFocused && <WordpressUrlForm action={action} defaultValues={{url}} />}
 
         {state.url && <WordpressAdvancedForm action={action} />}
 
