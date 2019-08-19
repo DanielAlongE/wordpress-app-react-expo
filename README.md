@@ -3,6 +3,8 @@ This App seeks to explore the posibility of creating a mobile app version of an 
 This is made easy because of the wordpress rest api. 
 Here we are using React Native via Expo for ease!
 
+Get live prreview [here](https://expo.io/@brownmarble/WordpressApp)
+
 ## Install
 
 ```sh
