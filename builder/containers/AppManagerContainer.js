@@ -36,7 +36,7 @@ import set from '../../redux/global-state';
 
         apps.push({...inputs});
 
-        console.log('creatAppFormAction', inputs);
+        //console.log('creatAppFormAction', inputs);
         this.props.set({apps});
 
         callback({success:true});

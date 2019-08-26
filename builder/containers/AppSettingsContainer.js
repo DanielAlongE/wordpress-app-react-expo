@@ -46,7 +46,7 @@ import {getApi} from '../../redux/api/action';
 
             if(status === 200 &&  data.length === 1){
                 app.url = url;
-                this.props.set({app});
+                this.props.set({app, url});
                 
                 console.log('Successful');
                 callback({success:true});
@@ -106,7 +106,7 @@ import {getApi} from '../../redux/api/action';
 
         const {isFocused} = this.props;
 
-        console.log('app', state);
+        //console.log('app', state);
 
         const args = {handleChange, state, action, isFocused};
 

@@ -1,18 +1,18 @@
 import React from 'react';
-import {  View } from 'react-native';
-import { Text, Button, Card, Title,  TextInput, Divider, Switch, RadioButton, Checkbox, List, IconButton } from 'react-native-paper';
+import {  View, ScrollView } from 'react-native';
+import { Colors, Text, Button, Card, Title,  TextInput, Divider, Switch, RadioButton, Checkbox, List, IconButton } from 'react-native-paper';
 import FormBuilder from '../containers/FormBuilderContainer';
+import Accordion from './AccordionGroupComp';
 
 
 
 
 const EditAppForm = ({...rest}) => {
     const editAppFormData = [
-        {section:{title:'App Details', data:[
+//        {section:{title:'App Details', data:[
             {text:{name:'name', placeholder:'App Name'}},
             {text:{name:'title', placeholder:'App Title'}},
-        ]}
-        }
+//        ]}        }
     ];
 
     return (<FormBuilder {...rest} data={editAppFormData} />);
@@ -43,11 +43,10 @@ const WordpressUrlForm = (props) => {
     //console.log('url Text', state);
 
     let wordpressFormData = [
-        {section:{title:'WordPress Url', data:[
+//        {section:{title:'WordPress Url', data:[
             {text:url},
             {submit:{label:'Verify'}}
-        ]}
-        }
+//        ]}        }
     ];
 
 
@@ -64,12 +63,11 @@ const WordpressAdvancedForm = (props) => {
     const helper = ({isSubmitting, success, state}) => {
 
         let advancedForm = [
-            {section:{title:"Wordpress Settings"}, data:[
+//            {section:{title:"Wordpress Settings"}, data:[
                     {text:{style:{width:50}}},
                     {text:{style:{width:50}}},
                     {text:{style:{width:50}}}
-                ]
-            }
+//                ]            }
         ]
         
         return advancedForm;
@@ -89,14 +87,25 @@ const AppSettingsComp = ({handleChange, state, action, isFocused}) => {
 
     const args = {handleChange, state};
 
-    return (<View>
-        <EditAppForm {...args} />
+    const style = {backgroundColor:Colors.purple100, margin:5};
 
-        {isFocused && <WordpressUrlForm action={action} defaultValues={{url}} />}
+    var accordionData = [
+        {title:'App Name', style, render:()=><EditAppForm {...args} />},
+    ];
 
-        {state.url && <WordpressAdvancedForm action={action} />}
+    if(isFocused){
+        accordionData.push({title:'WordPress Site Url', style, render:()=><WordpressUrlForm action={action} defaultValues={{url}} />});
+    }
 
-    </View>);
+    if(state.url){
+        accordionData.push({title:'WordPress Advanced', style,  render:()=><WordpressAdvancedForm action={action} />});  
+    }
+
+    return (
+    <ScrollView style={{flex:1, marginTop:20}}>
+        <Accordion data={accordionData} />        
+    </ScrollView>
+    );
 
 }
 

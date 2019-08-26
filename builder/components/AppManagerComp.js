@@ -1,5 +1,5 @@
 import React from 'react';
-import {  View } from 'react-native';
+import {  View, ScrollView } from 'react-native';
 import { Text, Button, Card, Title,  TextInput, Divider, Switch, RadioButton, Checkbox, List, IconButton } from 'react-native-paper';
 import FormBuilder from '../containers/FormBuilderContainer';
 //import NavigationService from '../../navigation/NavigationService.js';
@@ -45,12 +45,12 @@ const AppManagerComp = ({apps, action, enterApp, enterSettings}) => {
 
 
     return (
-    <View>
+    <ScrollView style={{flex:1, marginTop:20}}>
         <ChooseApp apps={apps} enterApp={enterApp} enterSettings={enterSettings} />
 
         <CreateAppForm action={action} clear={true} />
         
-    </View>);
+    </ScrollView>);
 }
 
 export default AppManagerComp;

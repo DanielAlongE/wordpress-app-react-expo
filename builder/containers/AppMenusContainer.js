@@ -7,7 +7,7 @@ import {getApi} from '../../redux/api/action';
 import {View} from 'react-native';
 
 
-import WordPressPostsContainer, {WordPressClass} from './WordPressPostsContainer';
+import { WordPressClass } from './WordPressPostsContainer';
 
  class AppMenusContainer extends WordPressClass {
     constructor(props){
@@ -19,15 +19,36 @@ import WordPressPostsContainer, {WordPressClass} from './WordPressPostsContainer
   
             },
             errors:[],
-            visible: false
+            visible: false,
+            target:'main_menu',
+            editModal: {visible:false},
+            deleteDialog: {visible:false}
             
         }
+
+    this.defaultMenuObj = {
+            main_menu:[],
+            sub_menu:[],
+            custom_menu:[]
+          }
+    
        
       this.toggleModal = this.toggleModal.bind(this);
       this.addMenuItem = this.addMenuItem.bind(this);
-      //this.enterSettings = this.enterSettings.bind(this);
+      this.openMenuModal = this.openMenuModal.bind(this);
+      this.getCategories = this.getCategories.bind(this);
+      this.deleteMenuItem = this.deleteMenuItem.bind(this);
+      this.editMenuItem = this.editMenuItem.bind(this);
+      this.setEditModal = this.setEditModal.bind(this);
+      this.setDeleteDialog = this.setDeleteDialog.bind(this);
     
       }
+
+      getAllApps(){
+        const {apps} = this.props.gState;
+
+        return apps || [];
+    }
   
       getCurrentApp(){
           const {currentApp, apps} = this.props.gState;
@@ -36,14 +57,18 @@ import WordPressPostsContainer, {WordPressClass} from './WordPressPostsContainer
   
           return app;
       }
-  
-      fetchCategories(obj={}){
-          var {per_page=50, orderby='count',  order='desc',  hide_empty=true} = obj;
-          let {getApi, url} = this.props;
-  
-          return getApi(`${url}/wp-json/wp/v2/categories`,{per_page, orderby, order, hide_empty},'categories').then(res=>res.data);
+
+      getCategories(){
+
+        const { categories } = this.props;
+
+        if(categories){
+            //doNoting
+        }else{
+            this.fetchCategories();
         }
-  
+          
+      }
   
       addWordpressFormAction({inputs, errors}, callback){
   
@@ -93,7 +118,7 @@ import WordPressPostsContainer, {WordPressClass} from './WordPressPostsContainer
           
           //this.addMenuItem({name:'New page', type:'wp_page', id:4});
 
-          console.log('---typeof', typeof super.fetchCategories())
+          //console.log('---typeof', typeof super.fetchCategories())
       }
   
       
@@ -106,45 +131,134 @@ import WordPressPostsContainer, {WordPressClass} from './WordPressPostsContainer
       toggleModal(){
           var visible = !this.state.visible;
           this.setState({visible});
-          console.log("callled visible", visible);
+          //console.log("callled visible", visible);
       }
   
+      openMenuModal(target="main_menu"){
+        this.setState({target, visible:true});
+      }
   
-      addMenuItem(item={}, target="main_menu"){
+      addMenuItem(item={}){
+
+        const { target } = this.state;
+
+        const {defaultMenuObj} = this;
   
-          var {currentApp, apps} = this.props.gState;
-          var app = apps[currentApp];
+        const {appIndex} = this.props;
+
+        var apps = this.getAllApps();
+
+        var app = apps[appIndex] || {};       
+
+
+          //console.log('addMenuItem', typeof apps, typeof app);
+
+          const oldMenu = app.menus || {};
+
+          var menus = {...defaultMenuObj, ...oldMenu};
+
+        //check if its an array of items
+        if(Array.isArray(item)){
+            menus[target].push(...item);
+        }else{
+            menus[target].push(item);
+        }
+
+
+          app.menus = menus;
+
   
-          if(!!app.menus){
-              app.menus[target].push(item);
-          }else{
-              app.menus = {[target]:[]};
-              app.menus[target].push(item);
-          }
-  
-          apps[currentApp] = app;
+            if(apps[appIndex]){
+              apps[appIndex] = app;
+            }
   
           this.props.set({apps});
       }
+
+      deleteMenuItem(index, target){
+        const {appIndex} = this.props;
+
+        var apps = this.getAllApps();
+
+        var app = apps[appIndex] || {};
+
+        var menus = app.menus;
+
+        if(menus && menus[target]){
+            //app.menus[target] = menus[target].filter((item, i) => i!==index);
+            app.menus[target].splice(index,1);
+
+            apps[appIndex] = app;
+        }
+
+        this.props.set({apps});
+        //console.log('AppMenu delete', menus[target].length);
+
+      }
   
-  
+      editMenuItem(index, item={},  target){
+        const {appIndex} = this.props;
+
+        var apps = this.getAllApps();
+
+        var app = apps[appIndex] || {};
+
+        var menus = app.menus;
+
+        if(menus && menus[target]){
+            //const oldMenu = app.menus[target];
+            
+            app.menus[target][index] = item;
+
+            apps[appIndex] = app;
+        }
+
+        this.props.set({apps});
+      }
+
+      setEditModal(obj={}){
+          this.setState({editModal:{...obj}});
+      }
+
+      setDeleteDialog(obj={}){
+        this.setState({deleteDialog:{...obj}});
+    }
+    
+      
   
       render() {
   
-          //const {currentApp, apps} = this.props.gState;
+          const { isFocused } = this.props;
+
           const state = this.getCurrentApp();//apps[currentApp] || {};
   
+          var menus = this.defaultMenuObj;
+
+          if(state.menus){
+              menus = {...menus, ...state.menus};
+          }
           
           const categories = this.props.categories && this.props.categories.data ? this.props.categories.data : [];
   
-          const {toggleModal, addMenuItem} = this;
-          const {visible} = this.state;
+          const {toggleModal, addMenuItem, openMenuModal, 
+                getCategories, deleteMenuItem, setEditModal, setDeleteDialog} = this;
+          const {visible, editModal, deleteDialog} = this.state;
   
           const {handleChange} = this;
           //const state = this.getCurrentApp();
-          const action = this.addWordpressFormAction;
+          //const action = this.addWordpressFormAction;
+
+          //console.log('AppMenus', this.state.target);
   
-          const args = {handleChange, state, action, toggleModal, visible, addMenuItem, categories};
+          const args = {handleChange, state, menus, toggleModal, 
+            visible, addMenuItem, deleteMenuItem, editModal, setEditModal,
+            openMenuModal, getCategories, categories, 
+            deleteDialog, setDeleteDialog};
+
+            //force rerender using isFocused
+            if(isFocused===false){
+                return null;
+            }
   
           return (
               <AppMenusComp {...args} />
@@ -154,9 +268,6 @@ import WordPressPostsContainer, {WordPressClass} from './WordPressPostsContainer
   
   }
   
-  const mapState = state => ({categories: state.api.categories,
-                              gState:state.globalState,
-                              url: state.globalState.url})
   
     const mapStateToProps = state => {
   
