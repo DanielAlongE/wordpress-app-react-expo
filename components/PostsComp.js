@@ -2,7 +2,7 @@ import React from 'react';
 //import {View, Image, ImageBackground} from 'react-native';
 import PostsContainer from '../containers/PostsContainer';
 import {default as Box} from '../layouts/ResponsiveBox';
-import {Button, List, Avatar, Surface, Card, Text, Title, Paragraph } from 'react-native-paper';
+import {Button, List, Avatar, Surface, Card, Text, Title, Paragraph, View } from 'react-native-paper';
 import Loading from './LoadingComp';
 //import HTML from 'react-native-render-html';
 import {WordPressThumbnailList} from '../builder/components/WordPressPostsComp';
@@ -10,7 +10,7 @@ import {WordPressThumbnailList} from '../builder/components/WordPressPostsComp';
 
 const Posts = ({posts=[], fetchMore, isFetching, navigation}) => {
 
-    const args = {posts, navigation};
+    const args = {posts, isFetching, navigation};
 
 return (
 <Box>

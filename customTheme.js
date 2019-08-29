@@ -1,4 +1,5 @@
 import { DefaultTheme, Colors } from 'react-native-paper';
+import store from './redux/store';
 
 /*
 primary - primary color for your app, usually your brand color.
@@ -18,7 +19,7 @@ backdrop - color for backdrops of various components such as modals.
     disabled: string;
     placeholder: string;
     backdrop: string;
-*/
+
 
 const theme = {
   ...DefaultTheme,
@@ -31,5 +32,22 @@ const theme = {
   },
   dark:false
 };
+*/
+
+const theme = () => {
+
+  const state = store.getState();
+  
+  const appIndex =  state && state.globalstore && state.globalstore.currentApp || 0;
+
+  const apps = state && state.globalstore && state.globalstore.apps[appIndex] || [];
+
+  const theme = apps[appIndex] && apps[appIndex]['theme'] || DefaultTheme;
+    
+  //console.log("theme from state", theme);
+
+      return theme;
+  };
+
 
 export default theme;

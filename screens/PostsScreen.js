@@ -33,6 +33,8 @@ render(){
     args.categories = categories;
   }
 
+  console.log("PostsScreen", categories)
+
   return (
     <View style={styles.container}>
       <ScrollView

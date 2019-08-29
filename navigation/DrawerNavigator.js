@@ -5,6 +5,7 @@ import React from 'react';
 import {View} from 'react-native';
 
 import DrawerComp from '../components/MainMenuComp';
+import AppbarComp from '../components/AppbarComp';
 
 import HomeScreen from '../screens/HomeScreen';
 import PostsScreen from '../screens/PostsScreen';
@@ -15,14 +16,16 @@ import MenusScreen from '../screens/MenusScreen';
 import PagesScreen from '../screens/PagesScreen';
 import ThemeScreen from '../screens/ThemeScreen';
 
+const {colors} = theme();
+
 
 const drawerViewConfig = {
     contentComponent: DrawerComp,
     contentOptions: {
-      activeTintColor: theme.colors.backdrop,
-      activeBackgroundColor: theme.colors.primary,
-      inactiveTintColor: theme.colors.text,
-      inactiveBackgroundColor: theme.colors.surface,
+      activeTintColor: colors.backdrop,
+      activeBackgroundColor: colors.primary,
+      inactiveTintColor: colors.text,
+      inactiveBackgroundColor: colors.surface,
       style: {},
       labelStyle: {}
     },
@@ -40,16 +43,25 @@ const stackConfig = {mode: 'card', //modal| 'card'
       headerBackTitleVisible:false,
       headerLayoutPreset: 'center',
       cardOverlayEnabled: false,
-      
+
+/*
       defaultNavigationOptions: {
         headerStyle: {
-          backgroundColor: theme.colors.primary,
+          backgroundColor: colors.primary,
         },
-        headerTintColor: theme.colors.background,
+        headerTintColor: colors.background,
         headerTitleStyle: {
           fontWeight: 'bold',
         },
       },
+      */
+     defaultNavigationOptions: ({ navigation }) => {
+      return ({
+        header: (
+          <AppbarComp navigation={navigation} />
+        ),
+      })
+    }
     };
 
 const SettingsNavigator = createBottomTabNavigator({

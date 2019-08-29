@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Text} from 'react-native';
 
 
-import {FormWrapper, TextForm, TextareaForm, FormDivider, FormSwitch, FormTitle, FormSection, FormSubmit} from '../components/FormComp';
+import {FormWrapper, TextForm, TextareaForm, FormDivider, FormSwitch, FormTitle, FormSection, IconPicker, ColorPicker, FormSubmit} from '../components/FormComp';
 
 const formRegister = {
     text:{comp:TextForm},
@@ -11,6 +11,8 @@ const formRegister = {
     title:{comp:FormTitle},
     switch:{comp:FormSwitch},
     section:{comp:FormSection},
+    icon:{comp:IconPicker},
+    color:{comp:ColorPicker},
     submit:{comp:FormSubmit}
 };
 
@@ -48,7 +50,7 @@ export default class FormBuilderContainer extends Component {
     }
     
     defaultFormAction(obj){
-        console.log("you didn't supply an anction", obj)
+        console.log("you didn't supply an action", obj)
     }
 
     init(){

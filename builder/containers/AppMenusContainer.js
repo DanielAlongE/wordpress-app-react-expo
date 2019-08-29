@@ -38,7 +38,7 @@ import { WordPressClass } from './WordPressPostsContainer';
       this.openMenuModal = this.openMenuModal.bind(this);
       this.getCategories = this.getCategories.bind(this);
       this.deleteMenuItem = this.deleteMenuItem.bind(this);
-      this.editMenuItem = this.editMenuItem.bind(this);
+      this.updateMenuItem = this.updateMenuItem.bind(this);
       this.setEditModal = this.setEditModal.bind(this);
       this.setDeleteDialog = this.setDeleteDialog.bind(this);
     
@@ -196,7 +196,7 @@ import { WordPressClass } from './WordPressPostsContainer';
 
       }
   
-      editMenuItem(index, item={},  target){
+      updateMenuItem(index, item={},  target){
         const {appIndex} = this.props;
 
         var apps = this.getAllApps();
@@ -238,10 +238,10 @@ import { WordPressClass } from './WordPressPostsContainer';
               menus = {...menus, ...state.menus};
           }
           
-          const categories = this.props.categories && this.props.categories.data ? this.props.categories.data : [];
+          const categories = this.props.categories && this.props.categories.data ? this.prepareCategories(this.props.categories.data) : [];
   
           const {toggleModal, addMenuItem, openMenuModal, 
-                getCategories, deleteMenuItem, setEditModal, setDeleteDialog} = this;
+                getCategories, deleteMenuItem, setEditModal, setDeleteDialog, updateMenuItem} = this;
           const {visible, editModal, deleteDialog} = this.state;
   
           const {handleChange} = this;
@@ -251,7 +251,7 @@ import { WordPressClass } from './WordPressPostsContainer';
           //console.log('AppMenus', this.state.target);
   
           const args = {handleChange, state, menus, toggleModal, 
-            visible, addMenuItem, deleteMenuItem, editModal, setEditModal,
+            visible, addMenuItem, deleteMenuItem, editModal, setEditModal, updateMenuItem,
             openMenuModal, getCategories, categories, 
             deleteDialog, setDeleteDialog};
 

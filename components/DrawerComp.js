@@ -33,11 +33,11 @@ var menu = root.map((n,i) => {
         />)}
     );
 
-    //console.log(navigation);
+    const {colors} = theme();
     
 return (
 <View>
-    <View style={{height:100, backgroundColor:theme.colors.accent}}></View>    
+    <View style={{height:100, backgroundColor:colors.accent}}></View>    
     <ScrollView>
         {data.length===0 ? <LoadingComp /> : menu}
     </ScrollView>    

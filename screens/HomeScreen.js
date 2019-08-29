@@ -20,7 +20,7 @@ const mapState = state => ({gState:state.globalState});
 class HomeScreen extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
-    
+  
     return ({
     headerTitle: navigation.getParam('title', 'Wordpress App'),
     headerLeft: ({scene})=>{
@@ -35,11 +35,11 @@ class HomeScreen extends React.Component {
       // Call any action
 
     }
-    console.log("HomeScreen is Focused", prevProps.isFocused , this.props.isFocused)
+    //console.log("HomeScreen is Focused", prevProps.isFocused , this.props.isFocused)
     
-    let state = this.props.navigation.state.params;
+    //let state = this.props.navigation.state.params;
 
-    console.log('HomeScreen',{state});
+    //console.log('HomeScreen',{state});
   }
 
   componentDidMount() {
@@ -54,11 +54,11 @@ class HomeScreen extends React.Component {
 
     const app = navigation.state.params || {};
 
-    
+    const {colors} = theme();
     
     return (
-      <View style={styles.container}>
-        <ScrollView style={styles.container}>
+      <View style={{backgroundColor:colors.background}}>
+        <ScrollView>
           <WordPress navigation={navigation} app={app} isFocused={isFocused} />
           
         </ScrollView>
@@ -71,7 +71,7 @@ class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:theme.colors.background
+    
   },
 
 });

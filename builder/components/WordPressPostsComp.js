@@ -49,10 +49,6 @@ export const WordPressThumbnailList = ({posts, navigation}) =>{
                 </Card>
                 );
 
-    if(posts.length === 0){
-        return <LoadingComp />
-    }
-
     return (<Wrapper>{showPosts}</Wrapper>);
 }
 
@@ -65,10 +61,6 @@ export const WordPressThumbnailSlide = ({posts, navigation}) =>{
                         <Card.Cover source={{ uri: post.media.medium.source_url }} />
                     </Card>
                     )
-
-    if(posts.length === 0){
-        return <LoadingComp />
-    }
 
     return (<ScrollView horizontal={true}>{showPosts}</ScrollView>);
 }
@@ -86,9 +78,6 @@ export const WordPressCardSlide = ({posts, navigation}) =>{
                         </Card>
                     );
 
-    if(posts.length === 0){
-        return <LoadingComp />
-    }
 
     return (<ScrollView horizontal={true}>{showPosts}</ScrollView>);
 }
@@ -105,9 +94,6 @@ export const WordPressCard = ({posts, navigation}) =>{
                             </Card.Content>
                         </Card>
                     )
-    if(posts.length === 0){
-        return <LoadingComp />
-    }
     
     return (<View>{showPosts}</View>);
 }
@@ -118,7 +104,6 @@ const TestingAllComp = ({posts, navigation}) => {
         <WordPressCardSlide {...args} />
         <WordPressThumbnailList {...args} />
         <WordPressThumbnailSlide {...args} />
-        <WordPressCardSlide {...args} />
         <WordPressCard {...args} />
         <WordPressList {...args} />
 

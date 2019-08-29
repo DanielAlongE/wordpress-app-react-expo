@@ -110,6 +110,7 @@ import set from '../../redux/global-state';
 
 
 
+
     render() {
 
         const apps = this.getApps();

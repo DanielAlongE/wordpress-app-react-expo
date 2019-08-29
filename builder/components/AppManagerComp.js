@@ -3,6 +3,7 @@ import {  View, ScrollView } from 'react-native';
 import { Text, Button, Card, Title,  TextInput, Divider, Switch, RadioButton, Checkbox, List, IconButton } from 'react-native-paper';
 import FormBuilder from '../containers/FormBuilderContainer';
 //import NavigationService from '../../navigation/NavigationService.js';
+import { DefaultTheme } from 'react-native-paper';
 
 const createAppFormData = [
     {section:{title:"Create New App", data:[
@@ -24,7 +25,11 @@ const ChooseApp = ({apps, enterApp, enterSettings}) =>{
 
     const showApps = apps.map((app, index)=>{
 
-        return (<List.Item key={`app-${index}`} onPress={()=>enterApp(index)}
+        const theme = app.theme || DefaultTheme;
+
+        //const style = {backgroundColor:theme.colors.primary, color:theme.colors.background,  marginTop:5};
+
+        return (<List.Item theme={theme} key={`app-${index}`} onPress={()=>enterApp(index)}
             title={app.name} description={app.title}
             right={() => <IconButton onPress={()=>enterSettings(index)} icon='settings' />}
          />);

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 //import PropTypes from 'prop-types';
 import {compose} from 'redux';
 import { connect } from 'react-redux';
 //import HomeContainer from './HomeContainer';
 import {getApi, cancelToken} from '../redux/api/action';
-import NavigationService from '../navigation/NavigationService.js';
-import purgeHtml from '../builder/containers/_purgeHtml';
+//import NavigationService from '../navigation/NavigationService.js';
+//import purgeHtml from '../builder/containers/_purgeHtml';
 import { WordPressClass } from '../builder/containers/WordPressPostsContainer';
 
 const MainMenuContainer = (Comp, rest={}) => class extends WordPressClass {
@@ -52,9 +52,11 @@ const MainMenuContainer = (Comp, rest={}) => class extends WordPressClass {
 //fetchCategories(obj={})
 
 
-  prepareMainMenu(data){
+  prepareMenu(data){
 
-    const {navigate} = NavigationService;
+    //const {navigate} = NavigationService;
+    const {navigation} = this.props;
+    const { navigate } = navigation;
 
     return data.map((menu, index)=>{
 
@@ -63,22 +65,24 @@ const MainMenuContainer = (Comp, rest={}) => class extends WordPressClass {
 
         if(!!menu.type){
             if(menu.type==="wp_posts"){
-                onPress = ()=>navigate('Posts', {title:(title||name), categories:id});
+                onPress = ()=>{navigate('Posts', {title:(title||name), categories:id});}
             }
             else if(menu.type==="wp_post"){
-                onPress = ()=>navigate('Post', {title:(title||name), id});
+                onPress = ()=>{navigate('Post', {title:(title||name), id});}
             }
             else if(menu.type==="wp_page"){
-                onPress = ()=>navigate('WPage', {title:(title||name), id});
+                onPress = ()=>{navigate('WPage', {title:(title||name), id});}
             }            
             else if(menu.type==="page"){
-                onPress = ()=>navigate('Page', {title:(title||name), id});
+                onPress = ()=>{navigate('Page', {title:(title||name), id});}
             }
         }else{
-            onPress = ()=>navigate('Posts', {title:(title||name), categories:id});
+            onPress = ()=>{navigate('Posts', {title:(title||name), categories:id});
+          console.log(navigate)
+          }
         }
 
-        return {key:`menu-${index}`, name, onPress}
+        return {key:`menu-${index}`, name, onPress, id}
     });
   }
 
@@ -92,10 +96,10 @@ const MainMenuContainer = (Comp, rest={}) => class extends WordPressClass {
             let data = this.props.categories ? this.props.categories.data : [];
 
             menu = data.filter((cat)=>cat.parent === 0);
-            menu = super.prepareCategories(menu);
+            menu = this.prepareCategories(menu);
       }
 
-      return this.prepareMainMenu(menu);
+      return this.prepareMenu(menu);
   }
 
 componentWillMount(){
@@ -123,6 +127,7 @@ componentDidMount() {
         //console.log(this.props.url);
 
         const {navigation} = this.props;
+
         
         //var categories = this.props.categories ? this.props.categories.data : [];
 

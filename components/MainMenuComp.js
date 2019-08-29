@@ -20,15 +20,16 @@ const MainMenuComp = ({mainMenu, navigation}) => {
             onPress={() => {
                 //navigation.closeDrawer();
                 onPress();
+                //console.log(item);
                 }}
             />)}
         );
 
-        //console.log(navigation);
+        const {colors} = theme();
     
 return (
 <View>
-    <View style={{height:100, backgroundColor:theme.colors.accent}}></View>    
+    <View style={{height:100, backgroundColor:colors.accent}}></View>    
     <ScrollView>
         {mainMenu.length===0 ? <LoadingComp /> : menu}
     </ScrollView>    

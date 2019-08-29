@@ -1,13 +1,14 @@
 import React from 'react';
 import {  View, ScrollView, StyleSheet } from 'react-native';
 import { Colors, FAB, Text, Button, Card, Title,  TextInput, Divider, Switch, RadioButton, Checkbox, List, IconButton } from 'react-native-paper';
-//import FormBuilder from '../containers/FormBuilderContainer';
-//import {default as Box} from '../../layouts/ResponsiveBox';
+import FormBuilder from '../containers/FormBuilderContainer';
 
 import Accordion from './AccordionGroupComp';
 import { SimpleModal } from './ModalComp';
 import {ConfirmDialog} from './DialogComp';
-import ShyButton from './ShyButton';
+import MenuFetchBox from './MenuFetchBoxComp';
+
+//import {ColorPicker} from './FormComp';
 
 
 const FabMenu = ({onPress}) => (
@@ -26,13 +27,17 @@ const MenuList = ({items, setEditModal, setDeleteDialog, target}) => {
     const showList = items.map((menu, index)=>{
         const visible = true;
 
+        const extra = menu.icon ? {left:()=><IconButton icon={menu.icon} />} : {};
+
         return <List.Item 
         key={`menu-${index}`} 
         title={menu.name}
         right={props=><View style={{flex:1, flexDirection:'row', alignContent:'flex-end', justifyContent:'flex-end'}}>
-          <IconButton icon="edit"  onPress={() => setEditModal({index, visible, target})} />
+          <IconButton icon="edit"  onPress={() => setEditModal({index, menu, visible, target})} />
           <IconButton icon="delete"  onPress={() => setDeleteDialog({visible, index, target})} />
-        </View>} />
+        </View>} 
+        {...extra}
+        />
     })
 
     return (
@@ -76,100 +81,39 @@ const MenuList = ({items, setEditModal, setDeleteDialog, target}) => {
       )
   }
 
-  class CategoryBox extends React.Component {
 
-    constructor(props){
-      super(props);
+  const EditMenuModal = ({editModal, setEditModal, updateMenuItem}) => {
 
-      this.state = {
-        pressed : [],
-        menus: []
-      }
+    const {visible, index, target, menu} = editModal;
 
-      this.handlePress = this.handlePress.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
+    console.log("editModal", editModal);
+
+    const submitAction = ({inputs}) => {
+      //console.log('FormSubmmited',{inputs});
+      updateMenuItem(index, inputs,  target);
+      setEditModal({visble:false});
     }
 
-    componentDidMount(){
-      const {getCategories} = this.props;
-      
-      if(getCategories){
-        getCategories();
-      }
+    const helper = ({isSubmitting, success, state}) => {
+      let data  = [
+        {text:{name:'name', placeholder:'Name'}},
+        {text:{name:'title', placeholder:'Title'}},
+        {icon:{name:'icon', placeholder:'Icon'}},
+        {color:{name:'color', placeholder:'Color'}},
+        {submit:{label:'Update', mode:'contained'}},
+        ]
 
-      console.log("Categories cdm")
+        if(success){
+          //
+        }
+
+      return data;
     }
-
-    handlePress(index, menuObj){
-      let {pressed, menus} = this.state;
-
-      pressed.push(index);
-      menus.push(menuObj);
-
-      console.log("handlePress", index);
-
-      this.setState({pressed, menus});
-    }
-
-    handleSubmit(){
-      const { addMenuItem, handleOpen } = this.props;
-      let {menus} = this.state;
-
-      addMenuItem(menus);
-      //this.setState({pressed, menus})
-
-      if(handleOpen){
-        handleOpen(-1);
-      }
-    }
-
-    componentWillUnmount() {
-
-      console.log("Categories cwu")      
-    }
-
-    render(){
-      const categories = this.props.categories || [];
-
-      const { addMenuItem } = this.props;
-      const { pressed } = this.state;
-      const ready = pressed.length > 0;
-
-      console.log(pressed)
-
-      var showCat = categories.map((item, index) => {
-        const {name, id} = item;
-
-        const menuObj = {name, id};
-
-        return (
-        <ShyButton key={`item-${index}`} style={{backgroundColor:Colors.grey200, margin:2}} onPress={()=>this.handlePress(index,menuObj)}>
-          {item.name}
-        </ShyButton>);
-
-//        ()=>addMenuItem(menuObj)
-        
-        return (<List.Item key={`item-${index}`} title={item.name} style={ pressed.indexOf(index) > -1 ? {backgroundColor:'pink'} : {} }
-                  onPress={()=>{
-                    this.handlePress(index,menuObj);
-                    //addMenuItem(menuObj)
-                  }} />)
-      });
-
-      return (<View>
-        {ready && <Button mode="contained" icon="save" onPress={this.handleSubmit} >Save</Button>}
-        
-          {showCat}
-      </View>)
-    }
-  }
-
-  const EditMenuModal = ({editModal, setEditModal}) => {
-
-    const {visible} = editModal;
 
     return (
     <SimpleModal title="Edit Menu Item" visible={visible} onDismiss={()=>setEditModal({visble:false})}>
+
+      <FormBuilder helper={helper} clear={true} action={submitAction} defaultValues={menu} />
 
     </SimpleModal>
     );
@@ -192,13 +136,13 @@ const MenuList = ({items, setEditModal, setDeleteDialog, target}) => {
 
 
     return (
-      <ConfirmDialog visible={visible} message="Are you sure you sure?" onDismiss={()=>onDismiss()} onConfirm={()=>doAction()} />
+      <ConfirmDialog visible={visible} message="Are you sure you want to delete?" onDismiss={()=>onDismiss()} onConfirm={()=>doAction()} />
     );
   }
 
 const AppMenusComp = ({handleChange, state, 
   menus, toggleModal, visible, 
-  addMenuItem, deleteMenuItem, editModal, setEditModal,
+  addMenuItem, deleteMenuItem, updateMenuItem, editModal, setEditModal,
   openMenuModal, getCategories, categories,
   setDeleteDialog, deleteDialog
 }) => {
@@ -210,10 +154,16 @@ const AppMenusComp = ({handleChange, state,
 
 
     const accordionData = [];
+    const accordionStyle = {backgroundColor:Colors.grey100, marginTop:10};
 
     if(!!state.url){
-      accordionData.push({title:'Categories', style:{backgroundColor:Colors.grey100},
-      render:({handleOpen})=><CategoryBox getCategories={getCategories} categories={categories} addMenuItem={addMenuItem} handleOpen={handleOpen} />});
+
+      accordionData.push({title:'Wordpres Categories', style:accordionStyle,
+      render:({handleOpen})=><MenuFetchBox fetchData={getCategories} data={categories} addMenuItem={addMenuItem} handleOpen={handleOpen} />});
+
+      accordionData.push({title:'Wordpres Pages', style:accordionStyle,
+      render:({handleOpen})=><MenuFetchBox fetchData={getCategories} data={categories} addMenuItem={addMenuItem} handleOpen={handleOpen} />});
+
     }
 
     return (
@@ -224,13 +174,15 @@ const AppMenusComp = ({handleChange, state,
                   deleteAction={deleteMenuItem} setEditModal={setEditModal}
                   setDeleteDialog={setDeleteDialog} />
 
-                <EditMenuModal editModal={editModal} setEditModal={setEditModal} />
+                <EditMenuModal editModal={editModal} setEditModal={setEditModal} updateMenuItem={updateMenuItem} />
 
                 <ConfirmDelete setDeleteDialog={setDeleteDialog} deleteDialog={deleteDialog} onConfirm={deleteMenuItem} />
 
-                <SimpleModal title="Add Menu Items" visible={visible} onDismiss={toggleModal}>
+                <SimpleModal title="Menu Chooser" visible={visible} onDismiss={toggleModal}>
                       <Accordion data={accordionData} />
                 </SimpleModal>            
+
+              
 
             
             </ScrollView>

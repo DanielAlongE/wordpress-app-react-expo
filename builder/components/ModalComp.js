@@ -1,8 +1,14 @@
 import React from 'react';
 import {  View, ScrollView, StyleSheet } from 'react-native';
-import { Dialog, Modal, FAB, Portal, Text, Button, Card, Title,  TextInput, Divider, Switch, RadioButton, Checkbox, List, IconButton } from 'react-native-paper';
+import { Appbar, Dialog, Modal, FAB, Portal, Text, Button, Card, Title,  TextInput, Divider, Switch, RadioButton, Checkbox, List, IconButton } from 'react-native-paper';
 //import FormBuilder from '../containers/FormBuilderContainer';
 import {default as Box} from '../../layouts/ResponsiveBox';
+
+const theme = {
+  colors: {
+    primary:'#3498db',
+  }
+}
 
 class MyDialog extends React.Component {
     state = {
@@ -35,23 +41,28 @@ class MyDialog extends React.Component {
 
 // backgroundColor:'yellow'
 
-export const SimpleModal = ({title, children, visible, onDismiss}) => (
+export const SimpleModal = ({title, subtitle, children, visible, onDismiss}) => (
     <Portal>
       
 
       <Modal visible={visible} onDismiss={onDismiss}>
+
       <View>
-          <Box style={{marginTop:30,pWidth:100, backgroundColor:'yellow', pHeight:100}}>
-            <View style={{flexDirection:'row', height:50, backgroundColor:'#eee', borderColor:'#ddd', borderWidth:1}}>
-              <View  style={{flex:1, alignSelf:'flex-start', borderRightColor:'#ddd', borderRightWidth:1, justifyContent:'center'}}>
-                <IconButton icon="close" onPress={onDismiss} />                
-              </View>
-                {title && <Text style={{flex:7, paddingTop:15, paddingBottom:5, justifyContent:'center'}}>{title}</Text>}
-            </View>
+          <Box style={{pWidth:100, pHeight:100, backgroundColor:'#ddd'}}>
+            <Appbar.Header theme={theme}>
+              <Appbar.BackAction
+                onPress={onDismiss} 
+              />
+              <Appbar.Content
+                title={title}
+                subtitle={subtitle || ''}
+              />
+              {/*<Appbar.Action icon="search" onPress={()=>console.log("search")} />
+              <Appbar.Action icon="more-vert" onPress={()=>console.log("more")}  />*/}
+            </Appbar.Header>
             <ScrollView style={{flex:1}}>
               {children}
-            </ScrollView>
-                        
+            </ScrollView>         
           </Box>
       </View>
 
@@ -73,22 +84,7 @@ class MyModal extends React.Component {
         this.setState({visible});
     }
 
-    componentWillReceiveProps(nextProps) {
-
-        const {visible} = this.state;
-
-        if(!!nextProps.open){
-            this.setState({visible:!visible});
-        }
-
-        //console.log("MyModal", {old:this.props.open, new:nextProps.open});
-    }
-  
-    render() {
-      const { visible } = this.state;
-
-      const {action:Comp, children} = this.props;
-
+/**
       return (
         <View>
            <Portal>
@@ -99,6 +95,48 @@ class MyModal extends React.Component {
            </Portal>
         </View>
       );
+ */
+  
+    render() {
+      const { visible } = this.state;
+
+      const {action:Comp, children, title, subtitle, ...rest} = this.props;
+      const onDismiss = this._hideModal.bind(this);
+
+     const childrenWithProps = React.Children.map(children, child =>
+      React.cloneElement(child, { hide: onDismiss, how:'are you' })
+    );
+     
+     return (
+       <View>
+         {Comp && <Comp show={this._showModal.bind(this)} {...rest} />}
+          <Portal>
+            
+            <Modal visible={visible} onDismiss={onDismiss}>
+      
+            <View>
+                <Box style={{pWidth:100, pHeight:100, backgroundColor:'#ddd'}}>
+                  <Appbar.Header theme={theme}>
+                    <Appbar.BackAction
+                      onPress={onDismiss} 
+                    />
+                    <Appbar.Content
+                      title={title}
+                      subtitle={subtitle || ''}
+                    />
+                    {/*<Appbar.Action icon="search" onPress={()=>console.log("search")} />
+                    <Appbar.Action icon="more-vert" onPress={()=>console.log("more")}  />*/}
+                  </Appbar.Header>
+                  <ScrollView style={{flex:1}}>
+                    {children && childrenWithProps}
+                  </ScrollView>         
+                </Box>
+            </View>
+      
+              </Modal>
+          </Portal>         
+       </View>
+);
     }
   }
 
