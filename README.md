@@ -11,13 +11,14 @@ Collaborators are welcomed!
 
 ### Here are some sample wordpress site url you can try the app with.
 
-* http://www.premiumtimesng.com/
-* http://www.punchng.com/
-* http://www.sunnewsonline.com/
-* http://thecable.ng/
+```
+ http://www.premiumtimesng.com/
+ http://www.punchng.com/
+ http://www.sunnewsonline.com/
+ http://thecable.ng/
+```
 
-
-### Screenshots
+## Screenshots
 
 ![PremiumTimes](https://user-images.githubusercontent.com/10385516/64017189-eac9da80-cb20-11e9-9b02-879c162bb986.png)
 
