@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Wordpress Blog App",
-    "slug": "WordpressApp",
+    "name": "Wordpress App Builder",
+    "slug": "wordpress-app-builder",
     "privacy": "public",
     "sdkVersion": "34.0.0",
     "platforms": [
@@ -26,7 +26,7 @@
     "ios": {
       "supportsTablet": true
     },
-    "description": "This App seeks to explore the posibility of creating a mobile app version of an existing Wordpress Blog. This is made easy because of the wordpress rest api. Here we are using React Native via Expo for ease!",
-    "githubUrl": "https://github.com/BrownMarble/wordpress-app-react-expo"
+    "description": "In seconds your WordPress site becomes a Native App.\nThe WordPress Gutenberg editor is the inspiration behind my quest.\nImagine being able to add and manipulate components just as you would on using a visual editor on WordPress.\n\nCollaborators are welcomed!",
+    "githubUrl": "https://github.com/DanielAlongE/wordpress-app-react-expo"
   }
 }
