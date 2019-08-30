@@ -3,12 +3,13 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 //import { DrawerItems, SafeAreaView } from 'react-navigation';
 import { Drawer, List, Button  } from 'react-native-paper';
 import LoadingComp from './LoadingComp';
-import theme from '../customTheme';
+//import theme from '../customTheme';
+import { DefaultTheme } from 'react-native-paper';
 
 import MainMenuContainer from '../containers/MainMenuContainer';
 
 
-const MainMenuComp = ({mainMenu, navigation}) => {
+const MainMenuComp = ({mainMenu, navigation, theme=DefaultTheme}) => {
 
     const menu = mainMenu.map((item) => {
 
@@ -25,7 +26,7 @@ const MainMenuComp = ({mainMenu, navigation}) => {
             />)}
         );
 
-        const {colors} = theme();
+        const {colors} = theme;
     
 return (
 <View>

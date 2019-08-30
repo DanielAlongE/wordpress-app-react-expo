@@ -36,20 +36,22 @@ import AccordionGroup from './AccordionGroupComp';
         return <FormBuilder data={formData} handleChange={handleChange} defaultValues={theme.colors} />
     }
 
-    const AppThemeComp = ({theme, handleChange}) => {
+    const AppThemeComp = ({theme, isFocused, handleChange}) => {
 
         const style = {backgroundColor:theme.colors.accent,  marginTop:5};
 
         
-        const accordionData = [
-            {title:'Colors', style, render:()=><ThemeForm theme={theme} handleChange={handleChange} />},
-            {title:'More', style}
+        const accordionData = [];
 
-        ];
+        if(isFocused){
+            accordionData.push({title:'Colors', style, render:()=><ThemeForm theme={theme} handleChange={handleChange} />});
+        }
+
+            accordionData.push({title:'More', style});
 
         return (
             <ScrollView style={{flex:1, marginTop:30}}>  
-                <AccordionGroup data={accordionData} />
+                {isFocused && <AccordionGroup data={accordionData} />}
             </ScrollView>
         );
     }

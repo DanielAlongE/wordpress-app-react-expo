@@ -4,9 +4,14 @@ import AppMenus from '../builder/containers/AppMenusContainer';
 import { IconButton } from 'react-native-paper';
 import { withNavigationFocus } from "react-navigation";
 
-function SettingsScreen({navigation} ) {
+function SettingsScreen({navigation, isFocused} ) {
 
-  return <AppMenus navigation={navigation} />;
+  
+  if(isFocused){
+    return <AppMenus navigation={navigation} />;
+  }else{
+    return null;
+  }
 }
 
 SettingsScreen.navigationOptions = {

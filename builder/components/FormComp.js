@@ -9,10 +9,10 @@ const defaultHandleChange = (props)=>{
     console.log("You have not included a handleChange function", props);
 }
 
-export const FormWrapper = ({children}) => <View>{children}</View>
+export const FormWrapper = ({children, ...rest}) => <View {...rest}>{children}</View>
 
 
-const Field = ({children}) => <View style={{marginLeft:5, marginRight:5}}>{children}</View>
+const Field = ({children}) => <View style={{marginLeft:5, marginRight:5, marginTop:5}}>{children}</View>
 
 
 export const FormSection = ({title,children}) => (
@@ -64,17 +64,16 @@ export const IconPicker = ({handleChange, state, ...props}) =>{
     
     const name  = props.name || "";
 
-    let value = state && state[name] ? state[name] : '';
-
+    let value = state && state[name] ? state[name] : 'add';
+    let label = props.label || "Choose Icon";
     return (
-        <MyModal value={value} action={({show, value})=>{
-            console.log("Value prop", value)
+        <MyModal value={value} label={label} action={({show, value, label})=>{
+            //console.log("Value prop", value)
             return (
             <Field>
-                <View style={{flexDirection:'row', flex:1}}>
-                    {value !=="" && <IconButton icon={value} />}
-                    <Button onPress={()=>show()} >Choose Icon</Button>                
-                </View>
+                <List.Item onPress={()=>show()}
+                title={label} style={{backgroundColor:'#eee'}} description={value}
+                left={()=><IconButton size={30} icon={value} />} />
             </Field>
             );
         }}>
@@ -92,15 +91,15 @@ export const ColorPicker = ({handleChange, state, ...props}) =>{
     let label = props.label || "Choose Color";
 
     return (
-        <MyModal value={value} action={({show, value})=>{
+        <MyModal value={value} label={label} action={({show, value, label})=>{
 
-            let extra = value !=="" ? {backgroundColor: value} : {};
+            //let extra = value !=="" ? {backgroundColor: value} : {};
             
             return (
             <Field>
                 
                 <List.Item onPress={()=>show()}
-                title={label} style={{backgroundColor:'#eee'}}
+                title={label} style={{backgroundColor:'#eee'}} description={value}
                 left={()=><IconButton color={value} size={30} icon="brightness-1" />} />
                 {/*<Button mode="outlined" style={{...extra}} onPress={()=>show()} >{label}</Button>*/}                 
             </Field>

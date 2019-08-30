@@ -7,7 +7,13 @@ import { withNavigationFocus } from "react-navigation";
 
 function ThemeScreen({navigation, isFocused} ) {
 
-  return <AppTheme  navigation={navigation} isFocused={isFocused} />;
+  if(isFocused){
+    return <AppTheme  navigation={navigation} isFocused={isFocused} />;
+  }else{
+    return null;
+  }
+
+
 }
 
 ThemeScreen.navigationOptions = {

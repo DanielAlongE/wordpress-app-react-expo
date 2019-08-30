@@ -38,13 +38,13 @@ const theme = () => {
 
   const state = store.getState();
   
-  const appIndex =  state && state.globalstore && state.globalstore.currentApp || 0;
+  const appIndex =  state && state.globalstore && state.globalState.currentApp ? state.globalState.currentApp : 0;
 
-  const apps = state && state.globalstore && state.globalstore.apps[appIndex] || [];
+  const apps = state && state.globalstore && state.globalstore.apps || [];
 
   const theme = apps[appIndex] && apps[appIndex]['theme'] || DefaultTheme;
     
-  //console.log("theme from state", theme);
+  //console.log("appIndex", appIndex, "theme from state", theme);
 
       return theme;
   };

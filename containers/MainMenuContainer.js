@@ -126,7 +126,7 @@ componentDidMount() {
 
         //console.log(this.props.url);
 
-        const {navigation} = this.props;
+        const {navigation, theme} = this.props;
 
         
         //var categories = this.props.categories ? this.props.categories.data : [];
@@ -136,7 +136,7 @@ componentDidMount() {
         const mainMenu = this.getMenuData();
 
 
-        const args = {mainMenu};
+        const args = {mainMenu, theme};
 
         if(navigation){
           args.navigation = navigation;
@@ -154,13 +154,16 @@ componentDidMount() {
 const mapStateToProps = state => {
   
   const appIndex =  state.globalState.currentApp || 0;
-    
+  const apps = state.globalState.apps || [];
+  const theme = apps && apps[appIndex] && apps[appIndex]['theme'];
+
       return ({
           url: state.globalState.url,
 //              posts:state.api[`posts-${appIndex}`],
           categories:state.api[`categories-${appIndex}`], 
           gState:state.globalState, 
-          appIndex
+          appIndex,
+          theme
   
     });
   };

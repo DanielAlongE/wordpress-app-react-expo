@@ -7,7 +7,11 @@ import { IconButton } from 'react-native-paper';
 
 function SettingsScreen({navigation, isFocused}) {
 
-  return <AppSettings navigation={navigation} isFocused={isFocused} />;
+  if(isFocused){
+    return <AppSettings navigation={navigation} isFocused={isFocused} />;
+  }else{
+    return null;
+  }
 }
 
 SettingsScreen.navigationOptions = {

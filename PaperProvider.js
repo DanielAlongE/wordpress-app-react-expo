@@ -21,11 +21,11 @@ const mapStateToProps = state => {
   
     const appIndex =  state.globalState.currentApp || 0;
   
-    const apps = state.globalState.apps[appIndex] || [];
+    const apps = state.globalState.apps || [];
   
-    const theme = apps[appIndex] && apps[appIndex]['theme'];
+    const theme = apps && apps[appIndex] && apps[appIndex]['theme'];
 
-    console.log("PaperProvider", appIndex)
+    console.log("PaperProvider", appIndex, theme)
       
         return ({theme, appIndex});
     };

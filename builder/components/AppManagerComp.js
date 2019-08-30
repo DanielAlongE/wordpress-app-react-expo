@@ -27,9 +27,11 @@ const ChooseApp = ({apps, enterApp, enterSettings}) =>{
 
         const theme = app.theme || DefaultTheme;
 
-        //const style = {backgroundColor:theme.colors.primary, color:theme.colors.background,  marginTop:5};
+        const colors = {text:theme.colors.background};
 
-        return (<List.Item theme={theme} key={`app-${index}`} onPress={()=>enterApp(index)}
+        const style = {backgroundColor:theme.colors.accent, color:theme.colors.primary,  marginTop:5};
+
+        return (<List.Item theme={theme} key={`app-${index}`} style={style} onPress={()=>enterApp(index)}
             title={app.name} description={app.title}
             right={() => <IconButton onPress={()=>enterSettings(index)} icon='settings' />}
          />);

@@ -92,7 +92,7 @@ import {getApi} from '../../redux/api/action';
 
     componentDidUpdate(prevProps) {
         if (prevProps.isFocused !== this.props.isFocused) {
-          console.log("AppSettings focus changed!")
+          console.log("AppSettings focus changed: ", this.props.isFocused)
         }
     
       }

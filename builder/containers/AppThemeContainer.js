@@ -6,7 +6,7 @@ import set from '../../redux/global-state';
 import { DefaultTheme } from 'react-native-paper';
 
 
-//import {View} from 'react-native';
+import {View} from 'react-native';
 
 
 //import { WordPressClass } from './WordPressPostsContainer';
@@ -22,6 +22,8 @@ import { DefaultTheme } from 'react-native-paper';
     
        
       this.handleChange = this.handleChange.bind(this);
+      
+      this.defaultTheme = {...DefaultTheme, colors:{...DefaultTheme.colors}};
     
       }
 
@@ -32,35 +34,38 @@ import { DefaultTheme } from 'react-native-paper';
     }
   
       getCurrentApp(){
-          const {currentApp, apps} = this.props.gState;
+          const {appIndex} = this.props;
+          const apps = this.getAllApps();
   
-          const app = apps[currentApp] || {};
+          const app = apps[appIndex] || {};
   
           return app;
       }
 
-      getCurrentTheme(){
-          const app = this.getCurrentApp();
+      getThemeById(index=0){
+          const apps = this.getAllApps();
 
-        return app.theme || DefaultTheme;
+          const theme = apps[index].theme || DefaultTheme;
+
+          console.log("getThemeById ", index)
+
+        return theme;
       }
   
       handleChange({name, type, value}){
-
+        const {defaultTheme} = this;
         const { appIndex } = this.props;
   
           var apps = this.getAllApps();
 
           var app = this.getCurrentApp();
 
-          var theme = this.getCurrentTheme();
+          const oldTheme = this.props.theme || {};
+
+          var theme = { ...defaultTheme, ...oldTheme }
   
           if(type==="colors"){
-            if(!!theme.colors){
                 theme.colors[name] = value;
-            }else{
-                theme.colors = {[name]: value}
-            }
           }else{
               theme[name] = value;
           }
@@ -97,17 +102,25 @@ import { DefaultTheme } from 'react-native-paper';
   
       render() {
         
-        const { isFocused } = this.props;
-        const { handleChange } = this;
+        const { isFocused, appIndex } = this.props;
+        const { handleChange, defaultTheme } = this;
 
-        const theme = this.getCurrentTheme();
+        const currentTheme = this.props.theme || {};
 
-        const args = { theme, handleChange };
+        const theme =  {...defaultTheme, ...currentTheme};
+
+
+        console.log({defaultTheme}, appIndex, isFocused)
+
+        const args = { theme, handleChange, isFocused, appIndex };
 
             //force rerender using isFocused 
-            if(isFocused===false){
-                return null;
-            }
+            if(!isFocused){
+                return <View />;
+            }        
+            
+
+
   
           return (
               <AppThemeComp {...args} />
@@ -121,11 +134,14 @@ import { DefaultTheme } from 'react-native-paper';
     const mapStateToProps = state => {
   
       const appIndex =  state.globalState.currentApp || 0;
-        
+      const apps = state.globalState.apps || [];
+      const theme = apps && apps[appIndex] && apps[appIndex]['theme'];
+
           return ({
               url: state.globalState.url,
               gState:state.globalState, 
-              appIndex      
+              appIndex,
+              theme 
         });
       };
 

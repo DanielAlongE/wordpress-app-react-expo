@@ -7,11 +7,11 @@ import { AppRegistry, Platform, StatusBar, StyleSheet, View, Text } from 'react-
 
 import AppNavigator from './navigation/AppNavigator';
 import Provider from './redux/Provider';
-import { Provider as PaperProvider } from 'react-native-paper';
+//import { Provider as PaperProvider } from 'react-native-paper';
 //import NavigationService from './navigation/NavigationService';
 //import theme from './customTheme';
 //import { DefaultTheme } from 'react-native-paper';
-//import PaperProvider from './PaperProvider';
+import PaperProvider from './PaperProvider';
 
 
 function App() {

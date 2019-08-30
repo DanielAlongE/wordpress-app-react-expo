@@ -52,10 +52,17 @@ export default class FormBuilderContainer extends Component {
     defaultFormAction(obj){
         console.log("you didn't supply an action", obj)
     }
+    
+    defaultOnSuccessAction(){
+        console.log("Form summited successfully")
+    }
 
     init(){
         //set form submit action
         this.action = this.props.action || this.defaultFormAction;
+
+        //set onSuccess action
+        this.onSuccess = this.props.onSuccess || this.defaultOnSuccessAction;
 
         //get default values if available
         const inputs = this.props.defaultValues || {};
@@ -173,6 +180,12 @@ export default class FormBuilderContainer extends Component {
     }
 
     formCallback(response={}){
+
+        //check for success and call onSuccess if available
+        if(response.success){
+            this.onSuccess();
+        }
+
         this.setState({...response, isSubmitting:false});
     }
 
@@ -219,8 +232,10 @@ export default class FormBuilderContainer extends Component {
 
         const form = this.buildForm(formData, state, handleChange);
 
+        const {style} = this.props;
+
         return (
-            <FormWrapper>
+            <FormWrapper style={style}>
                 {form}
             </FormWrapper>
         )

@@ -1,17 +1,25 @@
 import React from 'react';
 //import {TestForm} from '../builder/TestForm';
-//import AppMenus from '../builder/containers/AppMenusContainer';
+import AppPages from '../builder/containers/AppPagesContainer';
 import { IconButton } from 'react-native-paper';
-import Colors  from '../builder/components/ColorComp'
+import { withNavigationFocus } from "react-navigation";
 
-export default function SettingsScreen({navigation} ) {
 
-  return <Colors navigation={navigation} />;
+function PagesScreen({navigation, isFocused}) {
+
+  if(isFocused){
+    return <AppPages navigation={navigation} isFocused={isFocused} />;
+  }else{
+    return null;
+  }
 }
 
-SettingsScreen.navigationOptions = {
+PagesScreen.navigationOptions = {
   title: 'Pages',
   tabBarIcon: ({focused, horizontal, tintColor})=>{
     return (<IconButton color={tintColor} icon="description" />);
   }
 };
+
+
+export default withNavigationFocus(PagesScreen);
