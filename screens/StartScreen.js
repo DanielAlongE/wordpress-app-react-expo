@@ -2,10 +2,16 @@ import React from 'react';
 //import {TestForm} from '../builder/TestForm';
 import AppManager from '../builder/containers/AppManagerContainer'
 //import AppManager from '../components/MainMenuComp';
+import { withNavigationFocus } from "react-navigation";
 
-export default function SplashScreen({navigation}) {
+function SplashScreen({navigation, isFocused}) {
   
-  return <AppManager navigation={navigation} />;
+
+  if(isFocused){
+    return <AppManager navigation={navigation} />;
+  }else{
+    return null;
+  }
 }
 
 SplashScreen.navigationOptions = {
@@ -14,3 +20,5 @@ SplashScreen.navigationOptions = {
   headerMode: 'none',
   header: null
 };
+
+export default withNavigationFocus(SplashScreen);

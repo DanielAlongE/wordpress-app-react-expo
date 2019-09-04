@@ -13,7 +13,8 @@ const initialState = {
       menus:{
         main_menu:[
           {name:"Home", type:'page', id:1, title:'This is the home page', icon:'home'},
-          {name:'About Us', type:'wp_page', id:2}
+          {name:'About Us', type:'wp_page', id:2},
+          {name:'Exchange', type:'wp_page', title:'Ex', id:113154}
         ],
         sub_menu:[],
         custom_menu:[]

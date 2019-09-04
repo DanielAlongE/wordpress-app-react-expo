@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import AppPagesComp from '../components/AppPagesComp';
+import AppEditorComp from '../components/AppEditorComp';
 import set from '../../redux/global-state';
 import * as dotProp from 'dot-prop-immutable';
 //import {getApi} from '../../redux/api/action';
 
 //import {View} from 'react-native';
 
- class AppPagesContainer extends React.Component {
+ class AppEditorContainer extends React.Component {
     constructor(props){
   
         super(props);
@@ -18,7 +18,6 @@ import * as dotProp from 'dot-prop-immutable';
     
        
       this.creactPageFormAction = this.creactPageFormAction.bind(this);
-      //this.preparePages = this.preparePages.bind(this);
     
       }
 
@@ -42,21 +41,6 @@ import * as dotProp from 'dot-prop-immutable';
           const pages = apps[appIndex].pages || [];
   
           return pages;
-      }
-
-      preparePages(data=[]){
-
-        const {navigate} = this.props.navigation;
-
-        return data.map((page, id)=>{
-          let onPress;
-          if(navigate){
-            onPress = ()=>navigate('Editor',{id})
-          }
-          //onPress:()=>console.log('you just clicked me'),
-          return ({key:`page-${id}`, onPress,  ...page})
-        });
-
       }
     
       
@@ -93,6 +77,7 @@ import * as dotProp from 'dot-prop-immutable';
         });
 
         
+    
         this.props.set(newState);
         //console.log('creactPageFormAction', pages.length);
         
@@ -106,21 +91,19 @@ import * as dotProp from 'dot-prop-immutable';
 
         const { creactPageFormAction } = this;
 
-        const data = this.getAppPages();
+        const page = this.getCurrentApp();
 
-        const pages = data.length > 0 ? this.preparePages(data) : [];
-
-        const args = { pages, creactPageFormAction };
+        const args = { page, creactPageFormAction };
 
         //console.log({apps})
 
-            //force rerender using isFocused
+            //force rerender using isFocused 
             if(isFocused===false){
                 return null;
             }
   
           return (
-              <AppPagesComp {...args} />
+              <AppEditorComp {...args} />
           );
       }
   
@@ -140,4 +123,4 @@ import * as dotProp from 'dot-prop-immutable';
       };
 
 
-  export default connect(mapStateToProps, {set})(AppPagesContainer);
+  export default connect(mapStateToProps, {set})(AppEditorContainer);

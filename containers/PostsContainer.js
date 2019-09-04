@@ -48,43 +48,62 @@ const PostsContainer = (Comp, rest={}) => class extends WordPressClass {
   }
 
 
-componentWillMount(){
-  this._isMounted = false;
-  //set cancelToken
-  //this.cancelToken = this.props.cancelToken();
-}
+  componentWillMount(){
+    this._isMounted = false;
+    //set cancelToken
+    //this.cancelToken = this.props.cancelToken();
+  }
 
-componentWillUnmount() {
-  this._isMounted = false;
+  componentWillUnmount() {
+    this._isMounted = false;
 
-  //if(this.cancelToken){ this.cancelToken.cancel('ComponenetWillUnmount');}
-}
+    //if(this.cancelToken){ this.cancelToken.cancel('ComponenetWillUnmount');}
+  }
 
-componentDidMount() {
-  this._isMounted = true;
+  shouldComponentUpdate(nextProps) {
+    const oldCat = this.props.categories;
+    const newCat = nextProps.categories;
 
-  const {categories, posts} = this.props;
+    
+    if(oldCat !== newCat){
+      this.init();
+      console.log("Posts Cat Changed", oldCat, newCat );
+    }
+      return true;
+  }
 
+  init(){
+    const {categories, posts, navigation} = this.props;
 
+    if(navigation){
+        //close Drawer
+        navigation.closeDrawer();
+    }
 
-  if(categories){
-      if(posts){
-        var check = posts.data.filter(post=>{ return post.categories.indexOf(categories) > -1;  });
-
-        if(check.length>0){
-          console.log('post cat has content', categories);
+    if(categories){
+        if(posts){
+          const check = posts.data.filter(post=>{ return post.categories.includes(categories);  });
+  
+          if(check.length>=5){
+            console.log(`post category:${categories} has ${check.length} data`);
+          }else{
+            this.fetchMore();
+            console.log(`post category:${categories} has ${check.length} data`);
+          }
+  
         }else{
           this.fetchMore();
-          console.log('post cat is fetching content', categories);
         }
-
-      }else{
-        this.fetchMore();
-      }
+    }
+    else if(posts && posts.data){}else{this.fetchMore()}
+  
   }
-  else if(posts){}else{this.fetchMore()}
 
-}
+  componentDidMount() {
+    this._isMounted = true;
+
+    this.init();
+  }
 
 
         render() {
@@ -94,6 +113,8 @@ componentDidMount() {
         const {navigation, posts, categories, appIndex} = this.props;
 
         const args = {fetchMore};
+
+        //this.init();
 
         if(posts){
           //args.posts = posts;
@@ -105,7 +126,7 @@ componentDidMount() {
         
             if(categories){
               args.categories = categories;
-              collection = data.filter(post=>{ return post.categories.indexOf(categories) > -1 });
+              collection = data.filter(post=>{ return post.categories.includes(categories);  });
 
             }else{
               collection = data;
@@ -122,7 +143,6 @@ componentDidMount() {
 
          if(navigation){
           args.navigation = navigation;
-
         }
 
         return (

@@ -14,6 +14,8 @@ export const FormWrapper = ({children, ...rest}) => <View {...rest}>{children}</
 
 const Field = ({children}) => <View style={{marginLeft:5, marginRight:5, marginTop:5}}>{children}</View>
 
+export const FormFlex = ({children, style={backgroundColor:'red'}, ...rest}) => <View style={{flex:1, flexDirection:"row", alignContent:'center', justifyContent:'center', margin:5, ...style}} {...rest}>{children}</View>
+
 
 export const FormSection = ({title,children}) => (
     <List.Accordion title={title || 'More'}>
@@ -23,7 +25,7 @@ export const FormSection = ({title,children}) => (
     </List.Accordion>
 );
 
-export const TextForm = ({handleChange, state, ...props}) => {
+export const TextForm = ({handleChange, style={}, state, ...props}) => {
 
     handleChange = handleChange || defaultHandleChange;
 
@@ -32,9 +34,9 @@ export const TextForm = ({handleChange, state, ...props}) => {
     let value = state && state[name] ? state[name] : '';
 
     return (
-        <Field>
-                <TextInput mode='flat' onChangeText={value => handleChange({value,...props})} {...props} value={value} />
-        </Field>
+        <View style={style}>
+            <TextInput mode='flat' onChangeText={value => handleChange({value,...props})} {...props} value={value} />
+        </View>
         );
 }
 
@@ -53,6 +55,17 @@ export const FormSwitch = ({handleChange, state, ...props}) => {
     let value = state && state[name] ? state[name] : false;
 
     return (<Switch {...props} onValueChange={() => handleChange({...props, value:!value}) } value={value} />);
+}
+
+
+export const FormButton = ({label="Button", style={}, ...args}) => {
+
+    return (<View style={style}><Button mode="contained" {...args} >{label}</Button></View>)
+}
+
+export const FormIconButton = ({style={}, ...args}) => {
+
+    return (<View style={style}><IconButton icon="check-circle" {...args} /></View>)
 }
 
 export const FormSubmit = ({handleSubmit, label, success, isSubmitting, ...args}) => {

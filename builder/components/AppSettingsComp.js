@@ -28,6 +28,7 @@ const WordpressUrlForm = (props) => {
     const helper = ({isSubmitting, success, state})=>{
 
     let url = {name:'url', placeholder:'http://www.your-wordpress-site.com'};
+    let submit = {submit:{label:'Verify'}}
 
     if(isSubmitting){
         url = {...url, disabled:true};
@@ -35,8 +36,10 @@ const WordpressUrlForm = (props) => {
 
     if(success){
         url = {...url, mode:'outlined', theme:{color:'green'}};
+        submit = {button:{label:'Verified', icon:'check-circle', mode:'outlined'}};
+    
     }else{
-        url.error = true;
+        //url.error = true;
     }
     
     //console.log(isSubmitting,success);
@@ -45,7 +48,7 @@ const WordpressUrlForm = (props) => {
     let wordpressFormData = [
 //        {section:{title:'WordPress Url', data:[
             {text:url},
-            {submit:{label:'Verify'}}
+            {...submit}
 //        ]}        }
     ];
 
@@ -63,12 +66,34 @@ const WordpressAdvancedForm = (props) => {
     const helper = ({isSubmitting, success, state}) => {
 
         let advancedForm = [
-//            {section:{title:"Wordpress Settings"}, data:[
-                    {text:{style:{width:50}}},
-                    {text:{style:{width:50}}},
-                    {text:{style:{width:50}}}
-//                ]            }
-        ]
+            {flex:{ data:[
+                    {text:{style:{flex:1, margin:2}}},
+                    {text:{style:{flex:1, margin:2}}},
+                    {text:{style:{flex:1, margin:2}}}
+                ]}
+            },
+            {flex:{style:{height:30, flex:0}, data:[
+                {text:{style:{flex:2, height:30,}}},
+                {button:{style:{flex:1, margin:2}}}
+            ]}
+            },
+            {flex:{style:{flexDirection:'column', height:200}, data:[
+                {flex:{style:{flex:0, backgroundColor:'indigo', justifyContent:'space-around'}, data:[
+                    {button:{style:{width:100}}},
+                    {button:{style:{width:100}}}
+                ]}
+                },
+                {flex:{style:{flex:0, backgroundColor:'pink', justifyContent:'space-between'}, data:[
+                    {button:{style:{width:100}}},
+                    {button:{style:{width:100}}}
+                ]}
+                },
+                {flex:{style:{flex:0, backgroundColor:'yellow'}, data:[
+                    {button:{style:{width:100}}}
+                ]}
+                }
+            ]}}
+        ];
         
         return advancedForm;
     }

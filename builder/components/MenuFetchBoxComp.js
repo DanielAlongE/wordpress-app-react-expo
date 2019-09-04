@@ -67,6 +67,7 @@ export default class MenuFetchBox extends React.Component {
         //console.log("Prepare Doing default!");
         return data.map(item=>{
           const {name, id} = item;
+
           return {name, id};
         });
 

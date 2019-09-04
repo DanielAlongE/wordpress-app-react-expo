@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import AppManagerComp from '../components/AppManagerComp';
 import set from '../../redux/global-state';
+import Validator from './ValidatorClass';
+import * as dotProp from 'dot-prop-immutable';
+
+
 
  class AppManagerContainer extends Component {
    
@@ -32,12 +36,13 @@ import set from '../../redux/global-state';
 
     creactAppFormAction({inputs, errors},callback){
 
-        var  apps = this.props.gState.apps || [];
+        const  oldState = this.props.gState || {};
 
-        apps.push({...inputs});
+        //apps.push({...inputs});
 
-        //console.log('creatAppFormAction', inputs);
-        this.props.set({apps});
+        const newState = dotProp.set(oldState, 'apps', apps=>[...apps, {...inputs}]);
+
+        this.props.set(newState);
 
         callback({success:true});
     }
@@ -48,7 +53,7 @@ import set from '../../redux/global-state';
         var args = {currentApp:appIndex};
 
         //this will set the default app to enter
-        this.props.set({...args}).then(()=>{
+        this.props.set(args).then(()=>{
             navigation.navigate('Settings', {...args});
         });
 
@@ -81,7 +86,7 @@ import set from '../../redux/global-state';
         }
 
         //this will set the default app to enter
-        this.props.set({...args}).then(()=>{
+        this.props.set(args).then(()=>{
             navigation.push('Home', {...args});
         });
 
@@ -92,16 +97,46 @@ import set from '../../redux/global-state';
     
     componentWillMount(){
         this._isMounted = false;
-    
+
+
     
     }
     
     
     componentDidMount() {
         this._isMounted = true; 
-    
-    }
 
+
+        const {gState} = this.props;
+        //Validator.test();
+
+        let test = dotProp.set({}, ['foo', 'bar', 0], (n=0)=>{
+            console.log("#*********** n: ", n)
+            return 'new';
+        });
+
+        console.log("################# foo.bar.0", test)
+
+/**/        let example = dotProp.set(gState, 'apps', v=>{
+
+            if(Array.isArray(v)){
+            return [...v, {name:'new', title:'just testing out'} ]            
+            }
+
+            return v;
+        });
+
+        //this.props.set(example);
+
+        //console.log("dotProp", example);    
+        //let [isRequired, isInteger] = new Array(2).fill(true);
+        //let obj = {isRequired, max:5, min:2};
+        //console.log("hasChild", isRequired, isInteger)
+        
+//        let calender = require('../../builder/containers/_calender');
+
+//        console.log({calender});
+    }
     
     componentWillUnmount() {
         this._isMounted = false;

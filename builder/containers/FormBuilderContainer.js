@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 import {Text} from 'react-native';
 
 
-import {FormWrapper, TextForm, TextareaForm, FormDivider, FormSwitch, FormTitle, FormSection, IconPicker, ColorPicker, FormSubmit} from '../components/FormComp';
+import {FormWrapper, TextForm, TextareaForm, FormDivider, 
+    FormSwitch, FormTitle, FormSection, IconPicker,
+     ColorPicker, FormSubmit, FormButton, FormIconButton, FormFlex
+    } from '../components/FormComp';
 
 const formRegister = {
     text:{comp:TextForm},
@@ -11,8 +14,11 @@ const formRegister = {
     title:{comp:FormTitle},
     switch:{comp:FormSwitch},
     section:{comp:FormSection},
+    flex:{comp:FormFlex},
     icon:{comp:IconPicker},
     color:{comp:ColorPicker},
+    button:{comp:FormButton},
+    icon_button:{comp:FormIconButton},    
     submit:{comp:FormSubmit}
 };
 
@@ -112,7 +118,7 @@ export default class FormBuilderContainer extends Component {
                 return <Comp key={k} label={label} handleSubmit={handleSubmit} action={action} {...form} />
 
             }
-            else if(key==='section' && args['data'] && Array.isArray(args['data'])){
+            else if(key==='section' || key==='flex' && args['data'] && Array.isArray(args['data'])){
                 
                 let {data, name, ...rest} = args;
 
@@ -154,13 +160,6 @@ export default class FormBuilderContainer extends Component {
             const [[key, args]] = Object.entries(form);
                 //const [key, args] = form;
 
-
-/*                for (var item in form){
-                    //console.log(item, form[item]);
-
-                    return this.renderForm(item, form[item], state, handleChange, index);             
-                }
-*/
             return this.renderForm(key, args, state, handleChange, index);
 
             });

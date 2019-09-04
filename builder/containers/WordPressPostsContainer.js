@@ -5,10 +5,11 @@ import { connect } from 'react-redux';
 import purgeHtml from './_purgeHtml';
 import {getApi, cancelToken} from '../../redux/api/action';
 import set from '../../redux/global-state';
+import * as dotProp from 'dot-prop-immutable';
 
 const moment = require('moment');
 
-class WordPressClass extends Component {
+class WordPressClass extends React.PureComponent {
 
     apiId = 'posts';
     offset=0;
@@ -43,31 +44,67 @@ class WordPressClass extends Component {
     }
   }
 
-  getSinglePost(obj={}){
-    const {posts} = this.props;
-    var index = -1;
+  findPageIndex(obj={}){
+    const {pages={}} = this.props;
+    const {data=[]} = pages;
 
-    if(posts){
+    let index = data.findIndex(page=>{
 
-      index = posts.data.findIndex(post=>{
+      //if obj isEmpty
+      if(this.isEmptyObj(obj)){return false;}
 
-        //if obj isEmpty
-        if(this.isEmptyObj(obj)){return false;}
-
-        for(key in obj){
-          
-          if(post[key] !== obj[key]){
-            return false;
-          }
-
+      for(key in obj){
+        
+        if(page[key] !== obj[key]){
+          return false;
         }
 
-        return true;
-      });
+      }
 
-    }
+      return true;
+    });    
 
-    return index > -1 ? posts.data[index] : {};
+    return index;
+  }
+
+  getSinglePage(obj={}){
+    const {pages={}} = this.props;
+    const {data=[]} = pages;
+
+    let index = this.findPageIndex(obj);
+
+    return index > -1 && data[index] ? data[index] : {};
+  }
+
+  findPostIndex(obj={}){
+    const {posts={}} = this.props;
+    const {data=[]} = posts;
+
+    let index = data.findIndex(post=>{
+
+      //if obj isEmpty
+      if(this.isEmptyObj(obj)){return false;}
+
+      for(key in obj){
+        
+        if(post[key] !== obj[key]){
+          return false;
+        }
+
+      }
+
+      return true;
+    });    
+
+    return index;
+  }
+
+  getSinglePost(obj={}){
+    const {posts={}} = this.props;
+    const {data=[]} = posts;
+    const index = this.findPostIndex(obj);
+
+    return index > -1 && data[index] ? data[index] : {};
   }
 
 
@@ -88,6 +125,21 @@ class WordPressClass extends Component {
       }
   
       
+  });
+
+
+  }
+
+  getAvailablePagesId(){
+    const {pages} = this.props;
+
+    return new Promise((resolve)=>{ 
+      if(pages && pages.data && Array.isArray(pages.data)){
+        var ids = pages.data.map(pages=>pages.id);
+        resolve(ids)
+      }else{
+        resolve([])
+      }   
   });
 
 
@@ -121,6 +173,23 @@ fetchPosts(obj={}){
       }
       console.log({per_page, orderby, order, ...obj, _embed:''});
       return getApi(`${url}/wp-json/wp/v2/posts`,{per_page, orderby, order, ...obj, _embed:''}, apiId);  
+    });
+  }
+
+
+  fetchPages(obj={}){
+    let {per_page, orderby, order} = this;
+    let {getApi, url, appIndex} = this.props;
+    let apiId = `pages-${appIndex}`;
+
+    //get already fetch pages
+    return this.getAvailablePagesId().then(ids=>{
+      //console.log(`getAvailablePagesId (${id.length})`, id.join())
+      if(ids.length>0){
+        obj.exclude = ids.join();
+      }
+      console.log({per_page, orderby, order, ...obj, _embed:''});
+      return getApi(`${url}/wp-json/wp/v2/pages`,{per_page, orderby, order, ...obj, _embed:''}, apiId);  
     });
   }
 
@@ -229,13 +298,36 @@ fetchPosts(obj={}){
     });
   }
 
-  preparePost(post,key=0){
-    const {id, title:{rendered:t}, content:{rendered:c}, excerpt:{rendered:e}, date, _embedded} = post;
+  preparePost(post={},key=0){
+    //let  {id=0, title:{rendered:t=""}, content:{rendered:c=""}, excerpt:{rendered:e=""}, date=new Date(), _embedded={}} = post;
+
+    const id = dotProp.get(post, "id", 0);
+    const title = dotProp.get(post, "title.rendered", "");
+    const content = dotProp.get(post, "content.rendered", "");
+    const excerpt = dotProp.get(post, "excerpt.rendered", "");
+    const date = dotProp.get(post, "date", new Date());
+    const media = dotProp.get(post, "_embedded.wp:featuredmedia.0.media_details.sizes", {});
+
+    const dateFromNow = moment(date, "YYYY-MM-DD HH:mm:ss").fromNow();
+
+    //const media = _embedded && _embedded['wp:featuredmedia'] && _embedded['wp:featuredmedia'][0] && _embedded['wp:featuredmedia'][0]['media_details'] && _embedded['wp:featuredmedia'][0]['media_details']['sizes'] ?  _embedded['wp:featuredmedia'][0]['media_details']['sizes'] : {};
+    const {thumbnail={source_url:'https://picsum.photos/200'}, medium={source_url:'https://picsum.photos/500'}, full={source_url:'https://picsum.photos/700'}} = media;
+
+    return {key:`post-${key}-${id}`, id, title:purgeHtml(title), content, excerpt:purgeHtml(excerpt), date:dateFromNow, media:{thumbnail, medium, full}};
+  }
+
+
+  preparePostOld(post,key=0){
+    const {id=0, title:{rendered:t=""}, content:{rendered:c=""}, excerpt:{rendered:e=""}, date=new Date(), _embedded={}} = post;
 
     const dateFromNow = moment(date, "YYYY-MM-DD HH:mm:ss").fromNow();
     const media = _embedded && _embedded['wp:featuredmedia'] && _embedded['wp:featuredmedia'][0] && _embedded['wp:featuredmedia'][0]['media_details'] && _embedded['wp:featuredmedia'][0]['media_details']['sizes'] ?  _embedded['wp:featuredmedia'][0]['media_details']['sizes'] : {};
     const {thumbnail={source_url:'https://picsum.photos/200'}, medium={source_url:'https://picsum.photos/500'}, full={source_url:'https://picsum.photos/700'}} = media;
 
+    
+    if(this.isEmptyObj(post)){
+      console.log({key:`post-${key}-${id}`, id, title:purgeHtml(t), content:c, excerpt:purgeHtml(e), date:dateFromNow, media:{thumbnail, medium, full}});
+    }
     return {key:`post-${key}-${id}`, id, title:purgeHtml(t), content:c, excerpt:purgeHtml(e), date:dateFromNow, media:{thumbnail, medium, full}};
   }
 
@@ -334,6 +426,7 @@ componentWillUnmount() {
           return ({
               url: state.globalState.url,
               posts:state.api[`posts-${appIndex}`],
+              pages:state.api[`pages-${appIndex}`],
               categories:state.api[`categories-${appIndex}`], 
               gState:state.globalState, 
               appIndex

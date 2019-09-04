@@ -141,9 +141,9 @@ const MenuList = ({items, setEditModal, setDeleteDialog, target}) => {
   }
 
 const AppMenusComp = ({handleChange, state, 
-  menus, toggleModal, visible, 
+  menus, toggleModal, visible,
   addMenuItem, deleteMenuItem, updateMenuItem, editModal, setEditModal,
-  openMenuModal, getCategories, categories,
+  openMenuModal, getCategories, categories, getPages, pages,
   setDeleteDialog, deleteDialog
 }) => {
 
@@ -162,7 +162,11 @@ const AppMenusComp = ({handleChange, state,
       render:({handleOpen})=><MenuFetchBox fetchData={getCategories} data={categories} addMenuItem={addMenuItem} handleOpen={handleOpen} />});
 
       accordionData.push({title:'Wordpres Pages', style:accordionStyle,
-      render:({handleOpen})=><MenuFetchBox fetchData={getCategories} data={categories} addMenuItem={addMenuItem} handleOpen={handleOpen} />});
+      render:({handleOpen})=><MenuFetchBox fetchData={getPages} data={pages} 
+      prepareData={(data)=> data.map(item=>{
+        const {title, id} = item;
+        return {name:title, type:'wp_page', id};
+      })} addMenuItem={addMenuItem} handleOpen={handleOpen} />});
 
     }
 

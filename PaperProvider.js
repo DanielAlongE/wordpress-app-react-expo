@@ -25,7 +25,7 @@ const mapStateToProps = state => {
   
     const theme = apps && apps[appIndex] && apps[appIndex]['theme'];
 
-    console.log("PaperProvider", appIndex, theme)
+    //console.log("PaperProvider", appIndex, theme)
       
         return ({theme, appIndex});
     };

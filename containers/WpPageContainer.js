@@ -7,20 +7,24 @@ import {getApi, cancelToken} from '../redux/api/action';
 
 import { WordPressClass } from '../builder/containers/WordPressPostsContainer';
 
-const PostContainer = (Comp, rest={}) => class extends WordPressClass {
+const WpPageContainer = (Comp, rest={}) => class extends WordPressClass {
 
   //getPostById
 
         componentDidMount() {
           const {id} = this.props;
           
-          const postIndex = this.findPostIndex({id});
+          const pageIndex = this.findPageIndex({id});
 
-          //post not found in store, will attempt to download it
-          if(postIndex === -1){
-            this.fetchPosts({id}).then(res=>console.log('done fetching post id: ', id));
+          console.log({id, pageIndex});
+
+          //page not found in store, will attempt to download it
+         if(pageIndex === -1){
+            this.fetchPages({id}).then(res=>console.log("done fetching page: ", id));
+            console.log('fetching pages id:', id)
           }
 
+         // console.log("getSinglePost", )
 
         }
 
@@ -29,19 +33,14 @@ const PostContainer = (Comp, rest={}) => class extends WordPressClass {
 
           const {id} = this.props;
           
-          //const allData = posts ? posts.data : [];
 
-          //const index = allData.findIndex(post=>post.id === id);
-          
-          //const post = index > -1 ? allData[index] : {};
+          const data = this.getSinglePage({id});
 
-          //console.log('post ', index)
+          //!!data.content
 
-          const data = this.getSinglePost({id});
+          const page = data ? this.preparePost(data) : {};
 
-          const post = data ? this.preparePost(data) : {};
-
-          var args = {id, post};
+          var args = {id, page};
 
         return (
             <Comp {...args} />
@@ -57,7 +56,7 @@ const PostContainer = (Comp, rest={}) => class extends WordPressClass {
       
         return ({
             url: state.globalState.url,
-            posts:state.api[`posts-${appIndex}`],
+            pages:state.api[`pages-${appIndex}`],
   //          categories:state.api[`categories-${appIndex}`], 
   //          gState:state.globalState, 
             appIndex
@@ -70,5 +69,5 @@ const PostContainer = (Comp, rest={}) => class extends WordPressClass {
 
 export default compose(
     connect(mapStateToProps, {getApi, cancelToken}),
-    PostContainer
+    WpPageContainer
   );

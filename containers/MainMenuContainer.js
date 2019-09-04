@@ -60,7 +60,7 @@ const MainMenuContainer = (Comp, rest={}) => class extends WordPressClass {
 
     return data.map((menu, index)=>{
 
-        var {title, name, id} = menu;
+        var {title="", name, id=0, ...rest} = menu;
         var onPress;
 
         if(!!menu.type){
@@ -71,14 +71,14 @@ const MainMenuContainer = (Comp, rest={}) => class extends WordPressClass {
                 onPress = ()=>{navigate('Post', {title:(title||name), id});}
             }
             else if(menu.type==="wp_page"){
-                onPress = ()=>{navigate('WPage', {title:(title||name), id});}
+                onPress = ()=>{navigate('WpPage', {title:(title||name), id});}
             }            
             else if(menu.type==="page"){
                 onPress = ()=>{navigate('Page', {title:(title||name), id});}
             }
         }else{
             onPress = ()=>{navigate('Posts', {title:(title||name), categories:id});
-          console.log(navigate)
+          
           }
         }
 

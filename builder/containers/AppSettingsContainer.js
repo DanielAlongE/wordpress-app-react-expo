@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import AppSettingsComp from '../components/AppSettingsComp';
 import set from '../../redux/global-state';
 import {getApi} from '../../redux/api/action';
+import * as dotProp from 'dot-prop-immutable';
 
  class AppSettingsContainer extends Component {
    
@@ -65,7 +66,11 @@ import {getApi} from '../../redux/api/action';
         var app = this.getCurrentApp();
 
         app[name] = value
-        
+        //const {gState, appIndex} = this.props;
+
+        //const newState = dotProp.set(gState, `apps.${appIndex}.${name}`, value);
+        //console.log(`apps.${appIndex}.${name}`, value);
+
         this.props.set({...app});
 
 
@@ -118,6 +123,15 @@ import {getApi} from '../../redux/api/action';
 
 }
 
-const mapState = state => ({gState:state.globalState})
+//const mapState = state => ({gState:state.globalState})
+const mapStateToProps = state => {
+  
+    const appIndex =  state.globalState.currentApp || 0;
+      
+        return ({
+            gState:state.globalState, 
+            appIndex
+      });
+    };
 
-export default connect(mapState, {set, getApi})(AppSettingsContainer);
+export default connect(mapStateToProps, {set, getApi})(AppSettingsContainer);

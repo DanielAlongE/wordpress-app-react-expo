@@ -1,50 +1,21 @@
 //import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import MenuButton from '../components/MenuButton';
+import { ScrollView, View } from 'react-native';
 import PostComp from '../components/PostComp';
+import { withNavigationFocus } from "react-navigation";
 
-export default class HomeScreen extends React.Component {
+  function PostScreen({navigation, isFocused}) {
 
-  static navigationOptions = ({ navigation }) => {
-    
-    return ({
-    headerTitle: navigation.getParam('title', 'Wordpress App'),
-    headerLeft: ({scene})=>{
-      var {navigation} = scene.descriptor;
-      return (<MenuButton  onPress={()=>navigation.toggleDrawer()} />)},
-  });
-}
+    const id = navigation.getParam('id', 0);
 
+    const args = {navigation, isFocused, id};
+  
+      return (
+          <ScrollView style={{flex:1}}>
+            <PostComp {...args} />
+          </ScrollView>
+      );
 
-render(){ 
-  const {navigation} = this.props;
+  }
 
-  var id = navigation.getParam('id', 0);
-
-  var args = {navigation, id};
-
-  return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-        <PostComp {...args} />
-      </ScrollView>
-    </View>
-  )
-}
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-
-});
+export default withNavigationFocus(PostScreen);
