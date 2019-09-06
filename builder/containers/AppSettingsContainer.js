@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import AppSettingsComp from '../components/AppSettingsComp';
 import set from '../../redux/global-state';
 import {getApi} from '../../redux/api/action';
-import * as dotProp from 'dot-prop-immutable';
+import * as dotProp from './_dotProp';
 
  class AppSettingsContainer extends Component {
    

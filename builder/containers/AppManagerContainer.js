@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import AppManagerComp from '../components/AppManagerComp';
 import set from '../../redux/global-state';
-import Validator from './ValidatorClass';
+//import Validator from './ValidatorClass';
 import * as dotProp from 'dot-prop-immutable';
-
-
+import {doSet} from './_calender';
+import * as dot  from './_dotProp';
 
  class AppManagerContainer extends Component {
    
@@ -110,32 +110,7 @@ import * as dotProp from 'dot-prop-immutable';
         const {gState} = this.props;
         //Validator.test();
 
-        let test = dotProp.set({}, ['foo', 'bar', 0], (n=0)=>{
-            console.log("#*********** n: ", n)
-            return 'new';
-        });
 
-        console.log("################# foo.bar.0", test)
-
-/**/        let example = dotProp.set(gState, 'apps', v=>{
-
-            if(Array.isArray(v)){
-            return [...v, {name:'new', title:'just testing out'} ]            
-            }
-
-            return v;
-        });
-
-        //this.props.set(example);
-
-        //console.log("dotProp", example);    
-        //let [isRequired, isInteger] = new Array(2).fill(true);
-        //let obj = {isRequired, max:5, min:2};
-        //console.log("hasChild", isRequired, isInteger)
-        
-//        let calender = require('../../builder/containers/_calender');
-
-//        console.log({calender});
     }
     
     componentWillUnmount() {

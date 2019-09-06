@@ -6,12 +6,8 @@ import { withNavigationFocus } from "react-navigation";
 
 function SplashScreen({navigation, isFocused}) {
   
+    return <AppManager isFocused={isFocused} navigation={navigation} />;
 
-  if(isFocused){
-    return <AppManager navigation={navigation} />;
-  }else{
-    return null;
-  }
 }
 
 SplashScreen.navigationOptions = {

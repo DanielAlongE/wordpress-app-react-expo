@@ -335,6 +335,40 @@ fetchPosts(obj={}){
     return posts.map(post=>this.preparePost(post,key));
   }
 
+  prepareMenu(data){
+
+    //const {navigate} = NavigationService;
+    const {navigation} = this.props;
+    const { navigate } = navigation;
+
+    return data.map((menu, index)=>{
+
+        var {title="", icon, name, id=0, ...rest} = menu;
+        var onPress;
+
+        if(!!menu.type){
+            if(menu.type==="wp_posts"){
+                onPress = ()=>{navigate('Posts', {title:(title||name), categories:id});}
+            }
+            else if(menu.type==="wp_post"){
+                onPress = ()=>{navigate('Post', {title:(title||name), id});}
+            }
+            else if(menu.type==="wp_page"){
+                onPress = ()=>{navigate('WpPage', {title:(title||name), id});}
+            }            
+            else if(menu.type==="page"){
+                onPress = ()=>{navigate('Page', {title:(title||name), id});}
+            }
+        }else{
+            onPress = ()=>{navigate('Posts', {title:(title||name), categories:id});
+          
+          }
+        }
+
+        return {key:`menu-${index}`, icon, name, onPress, id}
+    });
+  }  
+
   generateHome(){
     const {gState} = this.props;
 

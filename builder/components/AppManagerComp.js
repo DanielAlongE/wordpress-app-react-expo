@@ -53,6 +53,7 @@ const AppManagerComp = ({apps, action, enterApp, enterSettings}) => {
 
     return (
     <ScrollView style={{flex:1, marginTop:20}}>
+
         <ChooseApp apps={apps} enterApp={enterApp} enterSettings={enterSettings} />
 
         <CreateAppForm action={action} clear={true} />

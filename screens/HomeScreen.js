@@ -14,8 +14,8 @@ import theme from '../customTheme';
 import ScreenRotate from '../layouts/ScreenRotate';
 import { withNavigationFocus } from "react-navigation";
 import WordPress from '../builder/components/WordPressPostsComp';
+//import WordPress from '../components/HomeComp';
 
-const mapState = state => ({gState:state.globalState});
 
 class HomeScreen extends React.Component {
 
@@ -57,23 +57,15 @@ class HomeScreen extends React.Component {
     const {colors} = theme();
     
     return (
-      <View style={{backgroundColor:colors.background}}>
-        <ScrollView>
-          <WordPress navigation={navigation} app={app} isFocused={isFocused} />
-          
-        </ScrollView>
-        <ScreenRotate />
-      </View>
+      <ScrollView style={{flex:1}}>
+        <View style={{backgroundColor:colors.background}}>
+            <WordPress navigation={navigation} app={app} isFocused={isFocused} />
+          <ScreenRotate />
+        </View>        
+      </ScrollView>
     )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    
-  },
-
-});
 
 export default withNavigationFocus(HomeScreen);

@@ -7,9 +7,8 @@ import {getApi, cancelToken} from '../redux/api/action';
 //import NavigationService from '../navigation/NavigationService.js';
 //import purgeHtml from '../builder/containers/_purgeHtml';
 import { WordPressClass } from '../builder/containers/WordPressPostsContainer';
-import * as dotProp from '../builder/containers/_dotProp';
 
-const MainMenuContainer = (Comp, rest={}) => class extends WordPressClass {
+const SubMenuContainer = (Comp, rest={}) => class extends WordPressClass {
 
 
   offset=0;
@@ -37,12 +36,12 @@ const MainMenuContainer = (Comp, rest={}) => class extends WordPressClass {
 
   }
 
-  getAppMenu(target="main_menu"){
+  getAppMenu(target="sub_menu"){
     
     const {currentApp, apps} = this.props.gState;
     const app = apps[currentApp] || {} ;
 
-    return dotProp.get(app, `menus.${target}`, []);//app.menus && app.menus[target] ? app.menus[target] : []
+    return app.menus && app.menus[target] ? app.menus[target] : []
   }
 
 
@@ -52,8 +51,20 @@ const MainMenuContainer = (Comp, rest={}) => class extends WordPressClass {
 
 //fetchCategories(obj={})
 
+
   getMenuData(){
-      const menu = this.getAppMenu();
+      const app = this.getAppMenu();
+      var menu;
+
+      if(app.length > 0){
+            menu = app;
+      }else{
+            let data = this.props.categories ? this.props.categories.data : [];
+
+            menu = data.filter((cat)=>cat.parent === 0);
+            menu = this.prepareCategories(menu);
+      }
+
       return this.prepareMenu(menu);
   }
 
@@ -72,7 +83,7 @@ componentWillUnmount() {
 componentDidMount() {
   this._isMounted = true;
 
-  //console.log("getMenuData", this.getMenuData())
+  const {categories} = this.props
 
 }
 
@@ -126,5 +137,5 @@ const mapStateToProps = state => {
 
 export default compose(
     connect(mapStateToProps, {getApi, cancelToken}),
-    MainMenuContainer
+    SubMenuContainer
   );

@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {Text} from 'react-native';
+import * as dotProp from './_dotProp';
 
 
 import {FormWrapper, TextForm, TextareaForm, FormDivider, 
     FormSwitch, FormTitle, FormSection, IconPicker,
-     ColorPicker, FormSubmit, FormButton, FormIconButton, FormFlex
+     ColorPicker, FormSubmit, FormButton, FormIconButton, FormFlex, 
+     FormMultiple, ButtonAdd, ButtonDelete
     } from '../components/FormComp';
 
 const formRegister = {
@@ -14,6 +15,9 @@ const formRegister = {
     title:{comp:FormTitle},
     switch:{comp:FormSwitch},
     section:{comp:FormSection},
+    multiple:{comp:FormMultiple},
+    multiple_add:{comp:ButtonAdd},
+    multiple_delete:{comp:ButtonDelete},
     flex:{comp:FormFlex},
     icon:{comp:IconPicker},
     color:{comp:ColorPicker},
@@ -38,12 +42,15 @@ export default class FormBuilderContainer extends Component {
           
       }
       
-     
+    
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.defaultFormAction = this.defaultFormAction.bind(this);
     this.formCallback = this.formCallback.bind(this);
     this.formDataHelper = this.formDataHelper.bind(this);
+
+    this.addChildMultiForm = this.addChildMultiForm.bind(this);
+    this.deleteChildMultiForm = this.deleteChildMultiForm.bind(this);
   
   
     }
@@ -118,19 +125,28 @@ export default class FormBuilderContainer extends Component {
                 return <Comp key={k} label={label} handleSubmit={handleSubmit} action={action} {...form} />
 
             }
-            else if(key==='section' || key==='flex' && args['data'] && Array.isArray(args['data'])){
+            else if(key==='multiple_add' || key==='multiple_delete'){
+
+                const {addChildMultiForm, deleteChildMultiForm} = this;
+
+                let action = key==='multiple_add' ? addChildMultiForm : deleteChildMultiForm;
+
+
+                return <Comp key={k} action={action} {...args} />
+
+            }
+            else if((key==='multiple' || key==='section' || key==='flex') && args['data'] && Array.isArray(args['data'])){
                 
                 let {data, name, ...rest} = args;
 
                 //name = name || k;
                 
-                var collection = this.buildForm(data, state, handleChange);
+                let collection = this.buildForm(data, state, handleChange);
 
-                return <Comp key={k} {...rest}  {...form}>
+                return <Comp key={k} state={state} name={name} {...rest}  {...form}>
                     {collection}
                 </Comp>
-            }
-            else{
+            }else{
                 let {name, ...extra} = args;
 
                 name = name || k;
@@ -168,15 +184,64 @@ export default class FormBuilderContainer extends Component {
 
     }
 
-    handleChange({name, value, ...rest}){
+    addChildMultiForm({parent, index}){
+        var ref = [parent];
+
+        if(Number.isInteger(index)){
+            ref.push(index);
+        }
+
+        ref = ref.join('.');
+
+        console.log("addChild", {ref})
+
+        const inputs = dotProp.set(this.state.inputs, ref, value=>{
+            value = Array.isArray(value) ? value : [];
+            return [...value, {}]
+        });
+
+        this.setState({inputs});
+    }
+
+    deleteChildMultiForm(parent, index){
+        console.log("deleteChild", {parent, index})
+        const inputs = dotProp.delete(this.state.inputs, `${parent}.${index}`);
+        this.setState({inputs});
+    }
+
+    handleChange({name, value, parent, index, ...rest}){
         const oldInputs = this.state.inputs;
 
-        const newInput = {[name]: value};
+        //const newInput = {[name]: value};
+        let inputs;
 
-        console.log(name, value);
+        //console.log(name, value);
+        //if it has index, it means its from a multi form type
+        //console.log({name, value, parent, index, rest});
 
-        this.setState({inputs:{...oldInputs, ...newInput}});
+        if(parent && Number.isInteger(index)){
+            
+            inputs = dotProp.set(oldInputs, `${parent}`, val=>{
+                val = Array.isArray(val) ? val : [];
+                index = index ? index : 0;
+                let obj = val[index] ? val[index] : {};
+
+                obj[name] = value;
+                val[index] = {...obj};
+
+                return [...val ]
+            });
+
+            //console.log(inputs)
+            //console.log(`${parent}.${index}.${name}`, value)
+        }else{
+            inputs = dotProp.set(oldInputs, `${name}`, value);
+        }
+
+        this.setState({inputs});
+
     }
+
 
     formCallback(response={}){
 

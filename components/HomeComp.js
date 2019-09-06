@@ -5,12 +5,14 @@ import {default as Box} from '../layouts/ResponsiveBox';
 import {Button, List, Avatar, Surface, Card, Text, Title, Paragraph } from 'react-native-paper';
 import Loading from './LoadingComp';
 import HTML from 'react-native-render-html';
+import MainMenu from './MainMenuComp'
 
 const HomeComp = ({some}) => {
 
     return (
-        <View>
-            <Text></Text>
+        <View style={{flex:1}}>
+            <MainMenu />
+            <Text>This is the Home Page o</Text>
         </View>
     );
 }

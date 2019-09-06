@@ -66,12 +66,30 @@ const WordpressAdvancedForm = (props) => {
     const helper = ({isSubmitting, success, state}) => {
 
         let advancedForm = [
-            {flex:{ data:[
-                    {text:{style:{flex:1, margin:2}}},
-                    {text:{style:{flex:1, margin:2}}},
-                    {text:{style:{flex:1, margin:2}}}
+            {multiple:{name:'group', data:[
+                    {flex:{data:[
+                        {text:{name:'attr', style:{flex:2, margin:2}}},
+                        {text:{name:'value', style:{flex:2, margin:2}}},
+                        {multiple_delete:{flex:1}}
+                    ]}},
+
+                    {multiple:{name:'roles', data:[
+                        {flex:{data:[
+                            
+                        ]}},
+                            {text:{name:'role', style:{flex:4, margin:2}}},
+                            {multiple_delete:{flex:1}}                        
+                        ]}
+                    },
+                    {multiple_add:{parent:'group.0.roles', label:'Add Role', style:{flex:1, margin:2}}},
                 ]}
             },
+            {multiple_add:{parent:'group', style:{flex:1, margin:2}}},
+
+            
+            
+
+            {submit:{}},
             {flex:{style:{height:30, flex:0}, data:[
                 {text:{style:{flex:2, height:30,}}},
                 {button:{style:{flex:1, margin:2}}}
@@ -123,7 +141,7 @@ const AppSettingsComp = ({handleChange, state, action, isFocused}) => {
     }
 
     if(state.url){
-        accordionData.push({title:'WordPress Advanced', style,  render:()=><WordpressAdvancedForm action={action} />});  
+        accordionData.push({title:'WordPress Advanced', style,  render:()=><WordpressAdvancedForm />});  
     }
 
     return (

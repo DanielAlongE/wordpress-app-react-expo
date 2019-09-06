@@ -4,7 +4,8 @@ import {  Text, Button, Card, Title, Paragraph, Avatar, TextInput, Divider, Swit
 //import NavigationService from '../../navigation/NavigationService.js';
 //import WordPressPostsContainer from '../containers/WordPressPostsContainer';
 import HomeContainer from '../../containers/HomeContainer';
-import LoadingComp from '../../components/LoadingComp'
+import LoadingComp from '../../components/LoadingComp';
+//import MainMenu from '../../components/MainMenuComp';
 
 export const PostsRegister = [
     {name:'List', comp:WordPressList},

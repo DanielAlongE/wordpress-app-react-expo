@@ -4,7 +4,7 @@ import theme from '../customTheme';
 import React from 'react';
 import {View} from 'react-native';
 
-import DrawerComp from '../components/MainMenuComp';
+import DrawerComp from '../components/SubMenuComp';
 import AppbarComp from '../components/AppbarComp';
 
 import HomeScreen from '../screens/HomeScreen';
