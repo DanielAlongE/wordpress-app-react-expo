@@ -1,6 +1,6 @@
 import React from 'react';
-import {ScrollView, View, FlatList} from 'react-native';
-import {Colors, Button, IconButton, Text, Searchbar} from 'react-native-paper';
+import {ScrollView, View, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {Colors, Button, IconButton, Text, Avatar, Searchbar} from 'react-native-paper';
 
 
 export default class ColorPickerComp extends React.Component {
@@ -52,6 +52,7 @@ export default class ColorPickerComp extends React.Component {
         
     }
 
+
     render(){
 
         const {hide} = this.props;
@@ -64,6 +65,20 @@ export default class ColorPickerComp extends React.Component {
 
         //console.log(hasData, typeof data)
 
+        const RoundComp = ({color, size=25, onPress=()=>console.log('pressed me'), ...rest}) => (
+        <TouchableOpacity onPress={onPress}>
+            <View style={{width:size, height:size, backgroundColor:color}}>
+                {/*<Avatar.Text label='' size={size} theme={{colors:{primary:color}}} />*/}
+            </View>
+        </TouchableOpacity>
+)
+
+
+        //<IconButton onPress={()=>onChange(item[1])} style={{margin:2, backgroundColor:item[1]}} icon="menu" />
+        //
+        //
+
+
         return(
             <ScrollView style={{flex:1}}>
 
@@ -73,20 +88,26 @@ export default class ColorPickerComp extends React.Component {
                     value={search}
                 />
 
+
+
             {hasData &&
-            <FlatList data={data} initialNumToRender={10} numColumns={10}
-            contentContainerStyle={{}}
-            columnWrapperStyle={{flex:1, height:50, flexDirection:'row', backgroundColor:'pink', alignContent:'center', justifyContent:'space-around'}}
-            renderItem={({item, index})=><IconButton onPress={()=>onChange(item[1])} style={{margin:2, backgroundColor:item[1]}} icon="menu" />}
+            <FlatList data={data} initialNumToRender={14}
+             numColumns={14}
+             contentContainerStyle={styles.container}
+            columnWrapperStyle={styles.contentWrapper}
+            renderItem={({item, index})=><RoundComp onPress={()=>onChange(item[1])} color={item[1]} />}
             keyExtractor={(item,index)=>index.toString()}
             ListEmptyComponent={()=><Empty />} />}
             
             {!hasData &&
             <Text>Nothing was found matching your input</Text>
             }
-
-                <Button onPress={()=>hide()} mode="outlined">This is just the beginning</Button>
             </ScrollView>
         )
     }
 }
+
+    const styles = StyleSheet.create({
+        container: {flex:1, flexDirection:'column', alignContent:"flex-start", flexWrap:"wrap", justifyContent:"flex-start"},
+        contentWrapper: {flex:1, flexDirection:'row', alignContent:'center', justifyContent:'space-around'}
+        });

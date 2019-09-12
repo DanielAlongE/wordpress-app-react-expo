@@ -5,7 +5,8 @@ import * as dotProp from './_dotProp';
 import {FormWrapper, TextForm, TextareaForm, FormDivider, 
     FormSwitch, FormTitle, FormSection, IconPicker,
      ColorPicker, FormSubmit, FormButton, FormIconButton, FormFlex, 
-     FormMultiple, ButtonAdd, ButtonDelete
+     FormMultiple, ButtonAdd, ButtonDelete,
+     makeRef
     } from '../components/FormComp';
 
 const formRegister = {
@@ -81,7 +82,7 @@ export default class FormBuilderContainer extends Component {
         const inputs = this.props.defaultValues || {};
         this.setState({inputs});
 
-        console.log("FormBuilder - Init", this.props.isFocused)
+        //console.log("FormBuilder - Init", this.props.isFocused)
     }
 
     
@@ -184,14 +185,9 @@ export default class FormBuilderContainer extends Component {
 
     }
 
-    addChildMultiForm({parent, index}){
-        var ref = [parent];
-
-        if(Number.isInteger(index)){
-            ref.push(index);
-        }
-
-        ref = ref.join('.');
+    addChildMultiForm({name, parent, index}){
+        
+        const ref = makeRef({name, parent, index});
 
         console.log("addChild", {ref})
 
@@ -217,7 +213,7 @@ export default class FormBuilderContainer extends Component {
 
         //console.log(name, value);
         //if it has index, it means its from a multi form type
-        //console.log({name, value, parent, index, rest});
+        console.log({parent, index, name, value });
 
         if(parent && Number.isInteger(index)){
             

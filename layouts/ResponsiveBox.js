@@ -41,8 +41,14 @@ export default class ResBox extends React.Component {
         return hidden.indexOf(device) > -1;
     }
 
-    getDimensions(){
+    static getScreen(){
         const { width, height } = Dimensions.get('window');
+
+        return { width, height }
+    }
+
+    getDimensions(){
+        const { width, height } = ResBox.getScreen();//Dimensions.get('window');
         this._setState({width, height});
     }
 

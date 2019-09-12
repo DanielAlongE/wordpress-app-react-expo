@@ -41,6 +41,27 @@ class MyDialog extends React.Component {
 
 // backgroundColor:'yellow'
 
+
+export const PlainModal = ({children, visible, onDismiss, ...rest}) => {
+  
+  if(children){
+    children = React.Children.map(children, child =>{
+      return React.cloneElement(child, { onDismiss, ...rest })}
+    );       
+  }
+   
+  
+  return (
+    <Portal>
+
+      <Modal visible={visible} onDismiss={onDismiss}>
+        <View>
+            {children}
+        </View>
+      </Modal>
+    </Portal>);
+}
+
 export const SimpleModal = ({title, subtitle, children, visible, onDismiss}) => (
     <Portal>
       

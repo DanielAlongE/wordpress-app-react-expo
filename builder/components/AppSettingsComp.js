@@ -3,7 +3,7 @@ import {  View, ScrollView } from 'react-native';
 import { Colors, Text, Button, Card, Title,  TextInput, Divider, Switch, RadioButton, Checkbox, List, IconButton } from 'react-native-paper';
 import FormBuilder from '../containers/FormBuilderContainer';
 import Accordion from './AccordionGroupComp';
-
+import * as dotProp from '../containers/_dotProp';
 
 
 
@@ -63,6 +63,19 @@ const WordpressUrlForm = (props) => {
 
 const WordpressAdvancedForm = (props) => {
 
+    const defaultValues = {
+        group:[{
+            attr:"color",
+            value:"blue",
+            roles:[
+                {role:'Sample 1'},
+                {role:'Sample 2'}
+            ]
+        }]
+    };
+
+    console.log("WordAdvance", "group.0.roles", dotProp.get(defaultValues, "group.0.roles"));
+
     const helper = ({isSubmitting, success, state}) => {
 
         let advancedForm = [
@@ -75,16 +88,16 @@ const WordpressAdvancedForm = (props) => {
 
                     {multiple:{name:'roles', data:[
                         {flex:{data:[
-                            
-                        ]}},
                             {text:{name:'role', style:{flex:4, margin:2}}},
-                            {multiple_delete:{flex:1}}                        
+                            {multiple_delete:{flex:1}}                              
+                        ]}},
+                      
                         ]}
                     },
-                    {multiple_add:{parent:'group.0.roles', label:'Add Role', style:{flex:1, margin:2}}},
+                    {multiple_add:{name:'roles', label:'Add Role', style:{flex:1, margin:2}}},
                 ]}
             },
-            {multiple_add:{parent:'group', style:{flex:1, margin:2}}},
+            {multiple_add:{name:'group', style:{flex:1, margin:2}}},
 
             
             
@@ -117,7 +130,7 @@ const WordpressAdvancedForm = (props) => {
     }
 
 
-    return (<FormBuilder {...props} helper={helper} />);
+    return (<FormBuilder {...props} helper={helper} defaultValues={defaultValues} />);
 }
 
 

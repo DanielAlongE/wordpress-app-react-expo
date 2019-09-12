@@ -6,26 +6,35 @@ import IconPickerComp from './IconPickerComp';
 import ColorPickerComp from './ColorPickerComp';
 import * as dotProp from '../containers/_dotProp';
 
-const getInput = (state={}, {name, parent, index, def=''}) => {
-    //const {inputs} = this.state;
-
+export const makeRef = ({parent, index, name}) =>{
     var ref = [];
 
-    if(parent && Number.isInteger(index)){
-        //ref = `${parent}.${index}.${name}`;
-        ref.push(parent)
-        ref.push(index)
-    }else if(parent){
+    if(parent){
         //ref = `${parent}.${name}`;
         ref.push(parent)
+    }
+    
+    if(Number.isInteger(index)){
+        //ref = `${parent}.${index}.${name}`;
+        ref.push(index)
     }
 
     if(name){
         ref.push(name)        
     }
 
+    return ref.join('.');
+}
 
-    return dotProp.get(state, ref, def);
+const getInput = (state={}, {name, parent, index, def=''}) => {
+    //const {inputs} = this.state;
+
+    var ref = makeRef({parent, index, name});
+
+    const value = dotProp.get(state, ref, def);
+    console.log(`getInput ${name}:`, ref, value);
+
+    return value;
 }
 
 const defaultHandleChange = (props)=>{
@@ -68,10 +77,10 @@ export const FormSection = ({title,children}) => (
     </List.Accordion>
 );
 
-export const ButtonAdd = ({label, parent, index, action, style={}, ...args}) => {
+export const ButtonAdd = ({label, name, parent, index, action, style={}, ...args}) => {
 
-    if(parent && action){
-        args.onPress = ()=>action({parent, index});
+    if(name && action){
+        args.onPress = ()=>action({name, parent, index});
     }
 
     console.log("ButtonAdd index: ", index)
@@ -102,33 +111,48 @@ export const ButtonDelete = ({label, parent, index, action, style={}, ...args}) 
 
 export const FormMultiple = ({name="group", parent, index, state, children}) => {
     
-
+    const hasParent = parent ? true :false;
 
     //if index exists it means it is nested in another FormMultiple
 
-    if(parent && Number.isInteger(index)){
-        parent = `${parent}.${index}.${name}`;
+    var getter = {};
+
+    if(hasParent){
+        //getter.parent = parent;
+        getter.name = name;
+        getter.index = index;
+        
+        parent = makeRef({parent, name, index });
+
+        console.log("hasParent state", state)
+
+    }else{
+        getter.name = name;
+        getter.index = index;
+        
+        parent = makeRef({ name });
     }
-    else if(parent){
-        parent = `${parent}.${name}`; 
-    }
-    else{
-        parent = name;        
-    }
+
+
+    
     
 /*
     let multiState = dotProp.get(state, parent, [{}]);
 */
-    let multiState = getInput(state, {parent, index, def:[{}]});
+    let multiState = getInput(state, {name, def:[{}]});
 
     //state && state[parent] ? state[parent] : [{}];
 
-    console.log("Multiple", name, parent, index, {multiState})
+    console.log("Multiple", {...getter}  )
     
     if(children){
         children = multiState.map((obj, index)=>{
                 return React.Children.map(children, child =>{
-                    console.log("multi child", child.props.parent)
+                    if(hasParent){
+                        //console.log("child", child.props)
+                        //console.log("state", obj)
+                    }
+
                     return React.cloneElement(child, { state:obj, parent, index })}
                 );        
         })        
@@ -146,11 +170,12 @@ export const TextForm = ({handleChange, style={}, state, ...props}) => {
 
     handleChange = handleChange || defaultHandleChange;
 
-    const { name } = props;
+    const { name, parent, index } = props;
 
     let value = state && state[name] ? state[name] : '';
+    //let value = getInput(state, {name, parent, index, def:''});
 
-    console.log("TextForm", state)
+    console.log(`TextForm -> ${name}`, value);
 
     return (
         <View style={style}>
