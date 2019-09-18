@@ -2757,11 +2757,6 @@ domutils@^1.5.1:
     dom-serializer "0"
     domelementtype "1"
 
-dot-prop-immutable@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/dot-prop-immutable/-/dot-prop-immutable-1.5.0.tgz#412550508682cc2037a5e2f174734193c12a5fdd"
-  integrity sha512-YcnAEqxtJSect/W3taJeMkKhDrL7NzzvgKlJ515m5aGxJBJpzetXf0wZbGapdrBNwAItWvb4sOn+jX0RBYYM1g==
-
 duplexify@^3.2.0:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/duplexify/-/duplexify-3.7.1.tgz#2a4df5317f6ccfd91f86d6fd25d8d8a103b88309"

@@ -45,6 +45,8 @@ import * as dotProp from './_dotProp';
 
             const {status, data} = res;
 
+            //console.log(res);
+
             if(status === 200 &&  data.length === 1){
                 app.url = url;
                 this.props.set({app, url});

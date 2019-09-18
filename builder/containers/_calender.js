@@ -1,4 +1,4 @@
-import * as dotProp from 'dot-prop-immutable';
+import * as dotProp from './_dotProp';
 
 const moment = require('moment');
 const startWeek = moment().startOf('month').week();

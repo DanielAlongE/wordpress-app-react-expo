@@ -155,7 +155,19 @@ export const deleteApi = (id, json) => dispatch => dispatch(fetchApiDelete(id, j
 export const getApi = (url='', obj={}, id=null, cancel) => {
 
   //let headers = !!obj.headers ? obj.headers : {};
-  let data = !!obj.data ? obj.data : obj;
+  //url = "https://andela.com/wp-json";
+  //obj = {};
+  // Add User-agent
+  const headers = obj.headers || {};
+  headers['User-Agent'] = `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36`;
+  headers['Sec-Fetch-Mode'] = 'cors';
+
+  headers['accept'] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3";
+  headers['accept-encoding'] = 'gzip, deflate, br';
+  headers['accept-language'] = 'en-US,en;q=0.9';
+  headers['cookie'] = "";
+
+  let data = obj.data || obj;
 
   let params = argsSerialize(data);
 
@@ -166,11 +178,13 @@ export const getApi = (url='', obj={}, id=null, cancel) => {
     //check for cancelToken
     let args = cancel ? {cancelToken: cancel.token} : {};
     
-    if(obj.headers){
-      args.headers = obj.headers;
-    }
+    //if(obj.headers){}
+      args.headers = headers;
+    
 
-    console.log(`${url}?${params}`)
+    //console.log(`${url}?${params}`,args)
+
+
       return axios.get(`${url}?${params}`, args)
       .then(res=>{
 

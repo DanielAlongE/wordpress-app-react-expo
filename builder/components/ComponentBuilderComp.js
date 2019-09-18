@@ -1,9 +1,23 @@
 import React, {useState} from 'react';
 import {View, Text} from 'react-native';
-import { Searchbar, Button, Avatar, List, Card } from 'react-native-paper';
+import { Searchbar, Button, IconButton, Avatar, List, Card } from 'react-native-paper';
 import {default as Box} from '../../layouts/ResponsiveBox';
 import componentRegister, {componentSchema} from '../containers/_componentRegister';
 import AccordionGroup from './AccordionGroupComp';
+
+
+const wrapperStyle = { margin:2, padding:2, borderWidth: 0.5, borderColor: 'green'}
+
+//<View style={{width:25, height:25, margin:5, backgroundColor:'yellow', position:"relative", top:-25}}></View>
+//ref={ref => this.makeStoreRef(ref)}
+
+export const EditorButton = ({icon='add-circle-outline', onPress}) => <IconButton icon={icon} onPress={onPress} />
+
+
+export const EditorWrapper = ({children, style=wrapperStyle, ...rest}) => (
+                                                                    <View style={style}>
+                                                                        {children}
+                                                                    </View>)
 
     const getGroups = (blocks)=> {
         

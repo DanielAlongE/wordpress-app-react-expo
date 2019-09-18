@@ -68,7 +68,6 @@ const SettingsNavigator = createBottomTabNavigator({
   Settings: {screen: SettingsScreen},
   Menus: {screen: MenusScreen},
   Pages: {screen: PagesScreen},
-  Editor: {screen: PageEditor},
   Theme: {screen: ThemeScreen}
 
 },{
@@ -84,13 +83,14 @@ const HomeNavigator = createStackNavigator({
   Home: {screen: HomeScreen},
   Posts: {screen: PostsScreen},
   Post: {screen: PostScreen},
-  WpPage: {screen: WpPageScreen}
+  WpPage: {screen: WpPageScreen},
 },
 {...stackConfig});
 
 export default createDrawerNavigator({
   App: HomeNavigator,
   Settings: SettingsNavigator,
+  Editor: {screen: PageEditor}
 },
   {
     initialRouteName: "App",

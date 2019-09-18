@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AppEditorComp from '../components/AppEditorComp';
 import set from '../../redux/global-state';
-import * as dotProp from 'dot-prop-immutable';
+import * as dotProp from './_dotProp';
 //import {getApi} from '../../redux/api/action';
 
 //import {View} from 'react-native';

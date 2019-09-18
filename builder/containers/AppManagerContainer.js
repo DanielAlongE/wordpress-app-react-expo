@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import AppManagerComp from '../components/AppManagerComp';
 import set from '../../redux/global-state';
 //import Validator from './ValidatorClass';
-import * as dotProp from 'dot-prop-immutable';
+import * as dotProp from './_dotProp';
 import {doSet} from './_calender';
 import * as dot  from './_dotProp';
 

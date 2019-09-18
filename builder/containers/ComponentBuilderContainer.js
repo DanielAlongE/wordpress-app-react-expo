@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { View, Text } from 'react-native';
 import * as dotProp from './_dotProp';
-import ComponentBuilderComp, {ContentBlock} from '../components/ComponentBuilderComp';
+import ComponentBuilderComp, {ContentBlock, EditorWrapper, EditorButton as Button} from '../components/ComponentBuilderComp';
 import { PlainModal } from '../components/ModalComp';
 
 
@@ -16,13 +16,16 @@ export default class ComponentBuilderContainer extends Component {
   
       this.state = {
         target:'',
-        visible: false
+        visible: false,
       }
+
+    this.refStore = [];
       
     
     //this.handleSubmit = this.handleSubmit.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.makeStoreRef = this.makeStoreRef.bind(this);
   
   
     }
@@ -102,6 +105,16 @@ export default class ComponentBuilderContainer extends Component {
 
         return {iconButton:{icon:'add-circle-outline', onPress}, ...obj}
     }
+
+    makeStoreRef(ref){
+        let index = this.refStore.length;
+
+        this.refStore[index] = ref;
+
+        console.log(index, typeof ref)
+
+        return this.refStore[index];
+    }
     
 
     renderComp({key, props={}, parent, index=0}){
@@ -110,12 +123,18 @@ export default class ComponentBuilderContainer extends Component {
 
         const isEditor = this.props.isEditor || false;
 
-        //console.log(key, register[key])
+        var RenderedComp = null;
+        var renderedControl = [];
+        
+
 
         if(key && register[key]){
 
             let Comp;
-            let defaultProps = register[key].defaultProps || {};
+            let defaultProps = register[key].props || {};
+
+            //spread default props into props
+            props = {...defaultProps, ...props};
 
             if(isEditor && register[key].editorRender){
                 Comp = register[key].editorRender
@@ -127,9 +146,17 @@ export default class ComponentBuilderContainer extends Component {
             }
 
 
-            const {children, ...rest} = props;
+            if(isEditor){
+                //push edit button
+                renderedControl.push(<Button icon="edit" />)
+                //console.log("CompBuilder", {isEditor, renderedControl});                
+            }
 
-            console.log("got this far ", ref);
+            //spread default props into props
+
+            const {children, ...restProps} = props;
+
+            //console.log("got this far ", ref);
 
             if(children && Array.isArray(children)){
 
@@ -137,32 +164,38 @@ export default class ComponentBuilderContainer extends Component {
 
                 const {receiveChildren=true, maxChildren=10} = register[key];
 
-
-                //append addButton
-                if(isEditor && childCount < maxChildren){
-                    children[childCount+1] = this.getAddButton({target:ref});
-                }
+                const showAdd = childCount < maxChildren;
 
 
                 if(receiveChildren){
                     const showChildren = this.buildPage(children, `${ref}.children`);
 
-                    return (<Comp {...defaultProps} {...rest} >
-                        {showChildren}
-                    </Comp> )                    
-                }else{
-                    return null;
+                    //push add button
+                    if(isEditor && showAdd){
+                        renderedControl.push(<Button />)
+                    }
+                    
+                                       
+                    RenderedComp = ()=> (<Comp {...restProps} >
+                                            {showChildren}
+                                        </Comp>);
                 }
 
             }else{
-                return <Comp {...defaultProps} {...rest} />                
+
+                    RenderedComp = ()=> <Comp {...restProps} />
+
             }
 
 
 
-        }else{
-            return null;            
         }
+
+        return isEditor ? <EditorWrapper>
+                            <RenderedComp />
+                            {renderedControl}
+                        </EditorWrapper> 
+                        : <RenderedComp />;  
     }
 
     buildPage(data=[], parent){
@@ -170,11 +203,8 @@ export default class ComponentBuilderContainer extends Component {
         return data.map((obj, index) => {
 
             const [[key, props]] = Object.entries(obj);
-                //const [key, args] = form;
 
-                //console.log({key, props})
-
-                return this.renderComp({key, props, parent, index});
+            return this.renderComp({key, props, parent, index});
 
             });
 
@@ -190,7 +220,7 @@ export default class ComponentBuilderContainer extends Component {
 
         //console.log(name, value);
         //if it has index, it means its from a multi form type
-        console.log({parent, index, name, value });
+        //console.log({parent, index, name, value });
 
         if(parent && Number.isInteger(index)){
             
@@ -240,37 +270,14 @@ export default class ComponentBuilderContainer extends Component {
 
     render() {
 
-        //const data = this.props.data || [];
+        const data = this.props.data || [];
 
         const isEditor = this.props.isEditor || false;
 
-        let data = [
-            {text:{text:'This is the way we rock', style:{margin:2, color:'blue'}}},
-            {view:{ style:{margin:10, backgroundColor:'pink', flex:1}, 
-                children:[
-                    {text:{text:'ABC'}},
-                    {text:{text:'EFG'}},
-                    {text:{text:'HIJ'}},
-                    {text:{text:'KLM'}},
-                    {text:{text:'NOP'}},
-
-                        {view:{ style:{margin:10, backgroundColor:'yellow', flex:1}, 
-                            children:[
-                                {text:{text:'ABC'}},
-                                {text:{text:'EFG'}},
-                                {text:{text:'HIJ'}},
-                                {text:{text:'KLM'}},
-                                {text:{text:'NOP'}},
-
-                            ]
-                        }}
-                ]
-            }}
-        ];
 
         //append AddButton if isEditor
         if(isEditor){
-            data.push(this.getAddButton({target:"page"}))
+            //data.push(this.getAddButton({target:"page"}))
         }
 
         //let getObj = dotProp.get(data,"1.view.children.5.view.children.4.text");
@@ -291,6 +298,25 @@ export default class ComponentBuilderContainer extends Component {
                     </View>);
         }
 //<Boo />
+
+/*
+        console.log("storeRef", this.refStore.length);
+
+
+
+        setTimeout(()=>{
+            this.refStore.forEach(o => {
+                if(o){
+                    o.measureInWindow((x, y, width, height) => {
+                        console.log({x, y, width, height});
+                    });                    
+                }
+            });
+            console.log(this.refStore[0])
+        },5000);
+*/
+
+
         return (
             
             <View>

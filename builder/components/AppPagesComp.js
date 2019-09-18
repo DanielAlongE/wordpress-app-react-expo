@@ -54,13 +54,18 @@ const MyFab = ({...rest}) => (
         );
     }
 
-    const AppPagesComp = ({pages, creactPageFormAction}) => {
+    const AppPagesComp = ({pages, creactPageFormAction, navigation}) => {
 
+        const { navigate } = navigation;
         const style = {backgroundColor:Colors.indigo100,  marginTop:5};
         const left = props => <List.Icon {...props} icon="first-page" />
 
         
-        var accordionData = pages.map(page=>({title:page.name, description:page.title, style, left}));
+        var accordionData = pages.map(page=>({title:page.name, 
+          description:page.title, 
+          style, left, 
+          onPress:()=>navigate('Editor',{pageIndex:0})
+        }));
 
 
         return (

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AppPagesComp from '../components/AppPagesComp';
 import set from '../../redux/global-state';
-import * as dotProp from 'dot-prop-immutable';
+import * as dotProp from './_dotProp';
 //import {getApi} from '../../redux/api/action';
 
 //import {View} from 'react-native';
@@ -102,7 +102,7 @@ import * as dotProp from 'dot-prop-immutable';
   
       render() {
         
-        const { isFocused, apps, appIndex } = this.props;
+        const { isFocused, navigation, apps, appIndex } = this.props;
 
         const { creactPageFormAction } = this;
 
@@ -110,7 +110,7 @@ import * as dotProp from 'dot-prop-immutable';
 
         const pages = data.length > 0 ? this.preparePages(data) : [];
 
-        const args = { pages, creactPageFormAction };
+        const args = { pages, creactPageFormAction, navigation };
 
         //console.log({apps})
 

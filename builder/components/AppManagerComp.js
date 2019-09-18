@@ -5,8 +5,6 @@ import FormBuilder from '../containers/FormBuilderContainer';
 //import NavigationService from '../../navigation/NavigationService.js';
 import { DefaultTheme } from 'react-native-paper';
 
-import PageRender from '../containers/ComponentBuilderContainer';
-
 const createAppFormData = [
     {section:{title:"Create New App", data:[
         {text:{name:'name', placeholder:'App Name'}},
@@ -59,8 +57,6 @@ const AppManagerComp = ({apps, action, enterApp, enterSettings}) => {
         <ChooseApp apps={apps} enterApp={enterApp} enterSettings={enterSettings} />
 
         <CreateAppForm action={action} clear={true} />
-
-        <PageRender isEditor={true} />
         
     </ScrollView>);
 }

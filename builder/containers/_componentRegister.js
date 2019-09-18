@@ -26,7 +26,7 @@ export const componentSchema = {
     name: 'No name',
     icon: 'add',
     description: 'The description goes here!',
-    defaultProps:{},
+    props:{},
     render: View,
     editorForm: View,
     receiveChildren: false,
@@ -38,7 +38,7 @@ const componentRegister = {
     text:{
         name: 'Text',
         description: 'Your basic text Component',
-        defaultProps:{text:'Enter a text here'},
+        props:{text:'Enter a text here'},
         render: TextComp,
         editorForm: TextForm,
         receiveChildren: false,
@@ -48,7 +48,7 @@ const componentRegister = {
     view:{
         name: 'View',
         description: 'Your basic view Component',
-        defaultProps:{},
+        props:{children:[]},
         render: ViewComp,
         editorForm: TextForm,
         receiveChildren: true,
@@ -58,7 +58,7 @@ const componentRegister = {
     iconButton:{
         name: 'Icon Button',
         description: 'Your react-native-pater Icon Button Component',
-        defaultProps:{icon:'add'},
+        props:{icon:'add'},
         render: IconButtonComp,
         editorForm: TextForm,
         receiveChildren: false,
@@ -68,7 +68,7 @@ const componentRegister = {
     button:{
         name: 'Icon Button',
         description: 'Your react-native-pater Icon Button Component',
-        defaultProps:{icon:'add'},
+        props:{icon:'add'},
         render: IconButtonComp,
         editorForm: TextForm,
         receiveChildren: false,
